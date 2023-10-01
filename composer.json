@@ -6,5 +6,10 @@
             "Excore\\": "app/"
         }
     },
-    "require": {}
+    "require-dev": {
+        "symfony/var-dumper": "^6.3"
+    },
+    "require": {
+        "filp/whoops": "^2.15"
+    }
 }
