@@ -1,0 +1,10 @@
+{
+    "name": "exapp/excore",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Excore\\": "app/"
+        }
+    },
+    "require": {}
+}
