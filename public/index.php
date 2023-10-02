@@ -1,11 +1,12 @@
 <?php
-
-use Excore\App;
+use Excore\App\App;
 
 require(dirname(__DIR__) . '/vendor/autoload.php');
 
 
-$app = new App('dev');
-$app->init();
 
 
+
+
+App::init('dev');
+App::run();

@@ -1,41 +1,50 @@
 <?php
 
-namespace Excore;
+namespace Excore\App;
 
-
+use Excore\Core\Config\Path;
+use Excore\Core\Modules\Router\Router;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
 
-class App
+abstract class App
 {
-    public function __construct(
-        protected string $mode
+    protected static string $mode;
 
-    ) {
-        $this->setMode($mode);
-    }
 
-    public function init()
+    public static function init($mode): void
     {
-        if ($this->getMode() === 'dev') {
-            $whoops = new Run;
-            $whoops->pushHandler(new PrettyPageHandler);
-            $whoops->register();
-        } else if ($this->getMode() === 'prod') {
-            echo 'Droduction Mode';
+        self::setMode($mode);
+
+        if (self::getMode() === 'dev') {
+            self::devMode();
         }
     }
 
-
-    private function getMode(): string
+    public static function run()
     {
-        return $this->mode;
+        $uri = $_SERVER['REQUEST_URI'];
+        Path::init();
+        Router::init(['main', 'api']);
+        Router::dispatch($uri);
     }
 
-    private function setMode(string $mode): self
+
+    private static function getMode(): string
     {
-        $this->mode = $mode;
-        return $this;
+        return self::$mode;
+    }
+
+    private static function setMode(string $mode): void
+    {
+        self::$mode = $mode;
+    }
+
+    private static function devMode(): void
+    {
+        $whoops = new Run;
+        $whoops->pushHandler(new PrettyPageHandler);
+        $whoops->register();
     }
 }

@@ -1,15 +1,19 @@
 {
-    "name": "exapp/excore",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Excore\\": "app/"
-        }
+  "name": "exapp/excore",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Excore\\App\\": "app/",
+      "Excore\\Core\\": "engine/"
     },
-    "require-dev": {
-        "symfony/var-dumper": "^6.3"
-    },
-    "require": {
-        "filp/whoops": "^2.15"
-    }
+    "files": [
+      "engine/helpers.php"
+    ]
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^6.3"
+  },
+  "require": {
+    "filp/whoops": "^2.15"
+  }
 }
