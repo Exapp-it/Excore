@@ -7,7 +7,7 @@
       "Excore\\Core\\": "engine/"
     },
     "files": [
-      "engine/helpers.php"
+      "engine/helpers/helpers.php"
     ]
   },
   "require-dev": {

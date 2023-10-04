@@ -1,11 +1,10 @@
 <?php
 
-namespace Excore\Core\Modules\View\Exceptions;
+namespace Excore\Core\Core\Exception;
 
 use Exception;
 
-
-class ViewException extends Exception
+class ContainerException extends Exception
 {
     public function __construct($message)
     {

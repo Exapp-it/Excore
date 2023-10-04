@@ -4,19 +4,30 @@ namespace Excore\Core\Modules\View;
 
 use Excore\Core\Config\Path;
 use Excore\Core\Modules\Http\Request;
-use Excore\Core\Modules\View\Exceptions\viewException;
+use Excore\Core\Modules\View\Exceptions\ViewException;
 
 class View
 {
     protected string $layout = 'app';
+    protected string $title = 'Excore - ';
 
     public function __construct(private Request $request)
     {
     }
 
+    public static function init(Request $request)
+    {
+        return new static($request);
+    }
+
     public function setLayout(string $layout)
     {
         $this->layout = $layout;
+    }
+
+    public function title(string $title)
+    {
+        $this->title .= $title;
     }
 
     public function render(string $template, array $data = [])
@@ -35,7 +46,7 @@ class View
             eval(' ?>' . $layoutContent . '<?php ');
             ob_end_flush();
         } else {
-            throw new viewException("Template or layout file not found.");
+            throw new ViewException("Template or layout file not found.");
         }
     }
 
@@ -88,6 +99,7 @@ class View
             "<ex-sidebar>" => "<?php require(\Excore\Core\Config\Path::components() . 'sidebar.exc.php'); ?>",
             "<ex-assets>" => "<?php echo \Excore\Core\Core\Assets::css();?>",
             "<ex-scripts>" => "<?php echo \Excore\Core\Core\Assets::js();?>",
+            "<ex-title>" => '<?php echo $this->title;?>',
         ];
     }
 }

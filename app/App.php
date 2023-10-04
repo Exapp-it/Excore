@@ -2,10 +2,11 @@
 
 namespace Excore\App;
 
-use Excore\Core\Config\Path;
-use Excore\Core\Core\Assets;
+use Excore\App\Dependencies;
+use Excore\Core\Core\Container;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Router\Router;
+use Excore\Core\Modules\Session\Session;
 use Excore\Core\Modules\View\View;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -13,9 +14,16 @@ use Whoops\Run;
 class App
 {
 
-    public  function __construct(
-        protected string $mode
-    ) {
+    public readonly Request $request;
+    public readonly View $view;
+    public readonly Router $router;
+    public readonly Session $session;
+    protected Container $container;
+
+    public  function __construct(protected string $mode)
+    {
+        $this->container = new Container();
+        (new Dependencies($this->container))->bind()->use();
     }
 
     public function run()
@@ -25,12 +33,13 @@ class App
             $this->devMode();
         }
 
-        $request = Request::init();
-        Path::init($request);
-        Assets::init($request);
-        $view = new View($request);
-        $router = new Router($request, $view);
-        $router->dispatch();
+        $this->request = $this->container->resolve('Request');
+        $this->container->resolve('Path');
+        $this->container->resolve('Assets');
+        $this->session = $this->container->resolve('Session');
+        $this->view = $this->container->resolve('View');
+        $this->router = $this->container->resolve('Router');
+        $this->router->dispatch();
     }
 
 

@@ -23,6 +23,11 @@ class Router
     }
 
 
+    public static function init(Request $request, View $view)
+    {
+        return new static($request, $view);
+    }
+
 
     public function dispatch()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Excore\Core;
+namespace Excore\Core\Core;
 
 abstract class Config {
   
