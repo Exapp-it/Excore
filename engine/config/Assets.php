@@ -1,6 +1,6 @@
 <?php
 
-namespace Excore\Core\Core;
+namespace Excore\Core\Config;
 
 use Excore\Core\Modules\Http\Request;
 

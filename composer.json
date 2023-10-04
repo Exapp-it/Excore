@@ -5,10 +5,7 @@
     "psr-4": {
       "Excore\\App\\": "app/",
       "Excore\\Core\\": "engine/"
-    },
-    "files": [
-      "engine/helpers/helpers.php"
-    ]
+    }
   },
   "require-dev": {
     "symfony/var-dumper": "^6.3"

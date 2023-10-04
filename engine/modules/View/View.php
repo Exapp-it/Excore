@@ -2,6 +2,7 @@
 
 namespace Excore\Core\Modules\View;
 
+use Excore\Core\Config\Env;
 use Excore\Core\Config\Path;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\View\Exceptions\ViewException;
@@ -97,8 +98,8 @@ class View
         return [
             "<ex-header>" => "<?php require(\Excore\Core\Config\Path::components() . 'header.exc.php'); ?>",
             "<ex-sidebar>" => "<?php require(\Excore\Core\Config\Path::components() . 'sidebar.exc.php'); ?>",
-            "<ex-assets>" => "<?php echo \Excore\Core\Core\Assets::css();?>",
-            "<ex-scripts>" => "<?php echo \Excore\Core\Core\Assets::js();?>",
+            "<ex-assets>" => "<?php echo \Excore\Core\Config\Assets::css();?>",
+            "<ex-scripts>" => "<?php echo \Excore\Core\Config\Assets::js();?>",
             "<ex-title>" => '<?php echo $this->title;?>',
         ];
     }

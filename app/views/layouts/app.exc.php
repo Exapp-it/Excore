@@ -13,7 +13,7 @@
         <ex-sidebar>
             <ex-content>
                 <ex-scripts>
-                    <?php echo \Excore\Core\Core\Assets::alpineCDN(); ?>
+                    <?php echo \Excore\Core\Config\Assets::alpineCDN(); ?>
 </body>
 
 </html>

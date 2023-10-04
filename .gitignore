@@ -2,6 +2,7 @@
 /composer.lock
 /package-lock.json
 .prettierrc
+.env
 
 # Logs
 logs

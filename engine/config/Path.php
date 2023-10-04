@@ -9,30 +9,39 @@ class Path
 
     const SEPARATOR = DIRECTORY_SEPARATOR;
 
+    private static string $root;
     private static string $app;
     private static string  $views;
     private static string  $layouts;
     private static string  $components;
-    private static string $root;
+    private static string  $config;
+
+    public function __construct(Request $request)
+    {
+        self::$root = $request->server('DOCUMENT_ROOT');
+        self::$app = rtrim(self::$root, self::SEPARATOR) . self::SEPARATOR . 'app';
+        self::$views = self::$app . self::SEPARATOR . 'views' . self::SEPARATOR;
+        self::$layouts = self::$views . 'layouts' . self::SEPARATOR;
+        self::$components = self::$views . 'components' . self::SEPARATOR;
+        self::$config = self::$root . self::SEPARATOR . 'config';
+    }
 
     public static function init(Request $request)
     {
-        self::$root = $request->server('DOCUMENT_ROOT');
-        self::setApp(self::$root);
-        self::setViews(self::app());
-        self::setLayout(self::views());
-        self::setComponents(self::views());
+        return new static($request);
     }
+
+    public static function root()
+    {
+        return self::$root;
+    }
+
 
     public static function app()
     {
         return self::$app;
     }
 
-    private static function setApp($path)
-    {
-        self::$app = rtrim($path, self::SEPARATOR) . self::SEPARATOR . 'app';
-    }
 
     public static function views()
     {
@@ -49,20 +58,8 @@ class Path
         return self::$components;
     }
 
-    private static function setViews($path)
+    public static function config()
     {
-        self::$views = $path . self::SEPARATOR . 'views' . self::SEPARATOR;
-    }
-
-    private static function setLayout($path)
-    {
-
-        self::$layouts = $path . 'layouts' . self::SEPARATOR;
-    }
-
-    private static function setComponents($path)
-    {
-
-        self::$components = $path . 'components' . self::SEPARATOR;
+        return self::$config;
     }
 }
