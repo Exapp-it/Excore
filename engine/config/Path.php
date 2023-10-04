@@ -2,6 +2,8 @@
 
 namespace Excore\Core\Config;
 
+use Excore\Core\Modules\Http\Request;
+
 class Path
 {
 
@@ -9,13 +11,17 @@ class Path
 
     private static string $app;
     private static string  $views;
+    private static string  $layouts;
+    private static string  $components;
     private static string $root;
 
-    public static function init()
+    public static function init(Request $request)
     {
-        self::$root = $_SERVER['DOCUMENT_ROOT'];
+        self::$root = $request->server('DOCUMENT_ROOT');
         self::setApp(self::$root);
         self::setViews(self::app());
+        self::setLayout(self::views());
+        self::setComponents(self::views());
     }
 
     public static function app()
@@ -33,9 +39,30 @@ class Path
         return self::$views;
     }
 
+    public static function layouts()
+    {
+        return self::$layouts;
+    }
+
+    public static function components()
+    {
+        return self::$components;
+    }
+
     private static function setViews($path)
     {
+        self::$views = $path . self::SEPARATOR . 'views' . self::SEPARATOR;
+    }
 
-        self::$views = $path . self::SEPARATOR . 'views';
+    private static function setLayout($path)
+    {
+
+        self::$layouts = $path . 'layouts' . self::SEPARATOR;
+    }
+
+    private static function setComponents($path)
+    {
+
+        self::$components = $path . 'components' . self::SEPARATOR;
     }
 }

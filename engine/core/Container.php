@@ -3,7 +3,7 @@
 namespace Excore\Core;
 
 
-abstract class Container
+class Container
 {
     
 }

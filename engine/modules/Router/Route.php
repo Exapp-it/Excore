@@ -6,39 +6,52 @@ namespace Excore\Core\Modules\Router;
 class Route
 {
 
-    private static string $uri;
-    private static string $method;
-    private static $action;
+    private $middleware = [];
 
-    public static function init($uri, $method, $action)
-    {
-        self::$uri = $uri;
-        self::$method = $method;
-        self::$action = $action;
+
+    public function __construct(
+        private string $uri,
+        private string $method,
+        private $action,
+
+    ) {
     }
 
-    public static function get($uri, $action)
+
+
+    public static function get($uri, $action): static
     {
-        return  static::init($uri, 'GET', $action);
+        return new static($uri, 'GET', $action);
     }
 
-    public static function post($uri, $action)
+    public static function post($uri, $action): static
     {
-        return  static::init($uri, 'POST', $action);
+        return new static($uri, 'POST', $action);
     }
 
-    public static function getMethod()
+    public function middleware($middleware)
     {
-        return self::$method;
+        $this->middleware[] = $middleware;
+        return $this;
     }
 
-    public static function getAction()
+    public function getMethod()
     {
-        return self::$action;
+        return $this->method;
     }
 
-    public static function getUri()
+    public function getAction()
     {
-        return self::$uri;
+        return $this->action;
+    }
+
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+    public function getMiddleware()
+    {
+        return $this->middleware;
     }
 }

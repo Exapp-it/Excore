@@ -3,67 +3,79 @@
 namespace Excore\Core\Modules\Router;
 
 use Excore\Core\Config\Path;
+use Excore\Core\Modules\Http\Request;
+use Excore\Core\Modules\View\View;
 
 
 class Router
 {
 
-    protected static $routes = [
+    protected $routes = [
         'GET' => [],
         'POST' => [],
     ];
 
-    public function __construct()
-    {
+    public function __construct(
+        protected Request $request,
+        protected View $view,
+    ) {
+        $this->buildRoute();
     }
 
-    public static function init(array $useRoutes)
-    {
-       $routes = self::getRoutes($useRoutes);
 
-       dd($routes);
-    }
 
-    public static function dispatch($uri)
+    public function dispatch()
     {
-        if (self::matches($uri)) {
-            self::$routes[$uri]();
+        $route = $this->findRoute($this->request->uri(), $this->request->method());
+
+        if (!$route) {
+            $this->errorPage(404);
+        }
+
+
+        if (is_array($route->getAction())) {
+            [$controller, $action] = $route->getAction();
+
+            $controller = new $controller($this->request, $this->view);
+
+            call_user_func([$controller, $action], []);
         } else {
-            exit('No Route');
+            call_user_func($route->getAction());
         }
     }
 
-
-    private static function matches($uri)
+    private function findRoute(string $uri, string $method): Route|false
     {
-        if (array_key_exists($uri, self::$routes)) {
-            return true;
+        foreach ($this->routes[$method] as $route) {
+            if ($route->getUri() === $uri) {
+                return $route;
+            }
         }
+
         return false;
+    }
+
+    private function buildRoute()
+    {
+        $routes = $this->getRoutes();
+        foreach ($routes as $route) {
+            $this->routes[$route->getMethod()][$route->getUri()] = $route;
+        }
     }
 
     /**
      * @return Route[]
      */
-
-    private static function getRoutes($group)
+    private function getRoutes(): array
     {
-        $allRoutes = [];
-        foreach ($group as $fileName) {
-            $routes = (array) include_once Path::app() . "/routes/{$fileName}.php";
-            foreach ($routes as $action) {
-                $allRoutes[] = $action;
-            }
-        }
-        return $allRoutes;
+
+        return include_once routesPath('routes');
     }
 
-    private static function routes()
+    private function errorPage($code)
     {
-        return self::$routes;
-    }
-
-    private static function useController()
-    {
+        http_response_code($code);
+        require(Path::views() . "errors/{$code}.exc.php");
+        exit;
     }
 }

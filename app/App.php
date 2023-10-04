@@ -3,45 +3,43 @@
 namespace Excore\App;
 
 use Excore\Core\Config\Path;
+use Excore\Core\Core\Assets;
+use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Router\Router;
+use Excore\Core\Modules\View\View;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-
-abstract class App
+class App
 {
-    protected static string $mode;
 
+    public  function __construct(
+        protected string $mode
+    ) {
+    }
 
-    public static function init($mode): void
+    public function run()
     {
-        self::setMode($mode);
 
-        if (self::getMode() === 'dev') {
-            self::devMode();
+        if ($this->mode() === 'dev') {
+            $this->devMode();
         }
+
+        $request = Request::init();
+        Path::init($request);
+        Assets::init($request);
+        $view = new View($request);
+        $router = new Router($request, $view);
+        $router->dispatch();
     }
 
-    public static function run()
+
+    private function mode(): string
     {
-        $uri = $_SERVER['REQUEST_URI'];
-        Path::init();
-        Router::init(['main', 'api']);
-        Router::dispatch($uri);
+        return $this->mode;
     }
 
-
-    private static function getMode(): string
-    {
-        return self::$mode;
-    }
-
-    private static function setMode(string $mode): void
-    {
-        self::$mode = $mode;
-    }
-
-    private static function devMode(): void
+    private function devMode(): void
     {
         $whoops = new Run;
         $whoops->pushHandler(new PrettyPageHandler);

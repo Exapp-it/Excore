@@ -1,7 +1,8 @@
 <?php
+use Excore\Core\Config\Path;
 
 
-function test()
+function routesPath($name)
 {
-    echo 'Test';
+    return Path::app() . "/routes/{$name}.php";
 }
