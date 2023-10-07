@@ -2,8 +2,7 @@
 
 namespace Excore\Core\Modules\View;
 
-use Excore\Core\Config\Env;
-use Excore\Core\Config\Path;
+use Excore\Core\Helpers\Path;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\View\Exceptions\ViewException;
 
@@ -96,10 +95,11 @@ class View
     private function getPlaceholders()
     {
         return [
-            "<ex-header>" => "<?php require(\Excore\Core\Config\Path::components() . 'header.exc.php'); ?>",
-            "<ex-sidebar>" => "<?php require(\Excore\Core\Config\Path::components() . 'sidebar.exc.php'); ?>",
-            "<ex-assets>" => "<?php echo \Excore\Core\Config\Assets::css();?>",
-            "<ex-scripts>" => "<?php echo \Excore\Core\Config\Assets::js();?>",
+            "<ex-header>" => "<?php require(\Excore\Core\Helpers\Path::components() . 'header.exc.php'); ?>",
+            "<ex-sidebar>" => "<?php require(\Excore\Core\Helpers\Path::components() . 'sidebar.exc.php'); ?>",
+            "<ex-footer>" => "<?php require(\Excore\Core\Helpers\Path::components() . 'footer.exc.php'); ?>",
+            "<ex-assets>" => "<?php echo \Excore\Core\Helpers\Assets::css();?>",
+            "<ex-scripts>" => "<?php echo \Excore\Core\Helpers\Assets::js();?>",
             "<ex-title>" => '<?php echo $this->title;?>',
         ];
     }

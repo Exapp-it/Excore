@@ -4,12 +4,22 @@ namespace Excore\Core\Core;
 
 use Excore\Core\Core\Exception\ContainerException;
 
-
-
 class Container
 {
-
     private $dependencies = [];
+    private static $instance;
+
+    private function __construct()
+    {
+    }
+
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
     public function register($name, $dependency)
     {
@@ -19,9 +29,14 @@ class Container
     public function resolve($name)
     {
         if (isset($this->dependencies[$name])) {
-            return $this->dependencies[$name]();
+            // Если зависимость уже была создана, вернуть её
+            if (is_callable($this->dependencies[$name])) {
+                $this->dependencies[$name] = $this->dependencies[$name]();
+            }
+            return $this->dependencies[$name];
         }
 
         throw new ContainerException("Dependency not found: $name");
     }
 }
+

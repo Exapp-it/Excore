@@ -2,8 +2,9 @@
 
 namespace Excore\Core\Modules\Router;
 
-use Excore\Core\Config\Path;
+use Excore\Core\Helpers\Path;
 use Excore\Core\Modules\Http\Request;
+use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\View\View;
 
 
@@ -17,15 +18,16 @@ class Router
 
     public function __construct(
         protected Request $request,
+        protected Response $response,
         protected View $view,
     ) {
         $this->buildRoute();
     }
 
 
-    public static function init(Request $request, View $view)
+    public static function init(Request $request, Response $response,  View $view)
     {
-        return new static($request, $view);
+        return new static($request, $response, $view);
     }
 
 
@@ -37,16 +39,18 @@ class Router
             $this->errorPage(404);
         }
 
+        $middleware = $route->getMiddleware();
+       // $this->middlewareHandler->handle($middleware, function () use ($route) {
+            if (is_array($route->getAction())) {
+                [$controller, $action] = $route->getAction();
 
-        if (is_array($route->getAction())) {
-            [$controller, $action] = $route->getAction();
+                $controller = new $controller($this->request, $this->response, $this->view);
 
-            $controller = new $controller($this->request, $this->view);
-
-            call_user_func([$controller, $action], []);
-        } else {
-            call_user_func($route->getAction());
-        }
+                call_user_func([$controller, $action]);
+            } else {
+                call_user_func($route->getAction());
+            }
+       // });
     }
 
     private function findRoute(string $uri, string $method): Route|false

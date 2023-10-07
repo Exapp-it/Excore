@@ -1,7 +1,7 @@
 <?php
 
-use Excore\Core\Config\Env;
-use Excore\Core\Config\Path;
+use Excore\Core\Helpers\Env;
+use Excore\Core\Helpers\Path;
 
 
 

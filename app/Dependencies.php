@@ -2,13 +2,14 @@
 
 namespace Excore\App;
 
-use Excore\Core\Config\Env;
-use Excore\Core\Config\Path;
-use Excore\Core\Config\Assets;
+use Excore\Core\Helpers\Env;
+use Excore\Core\Helpers\Path;
+use Excore\Core\Helpers\Assets;
 use Excore\Core\Core\Config;
 use Excore\Core\Core\RegisterDependencies;
 use Excore\Core\Modules\Database\DB;
 use Excore\Core\Modules\Http\Request;
+use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\Router\Router;
 use Excore\Core\Modules\Session\Session;
 use Excore\Core\Modules\View\View;
@@ -19,11 +20,15 @@ class Dependencies extends RegisterDependencies
     public function bind()
     {
         $this->container->register('DB', function () {
-            return DB::init(Config::db());
+            return DB::getInstance(Config::db());
         });
 
         $this->container->register('Request', function () {
             return Request::init();
+        });
+
+        $this->container->register('Response', function () {
+            return Response::init();
         });
 
         $this->container->register('Session', function () {
@@ -37,6 +42,7 @@ class Dependencies extends RegisterDependencies
         $this->container->register('Router', function () {
             return  Router::init(
                 $this->container->resolve('Request'),
+                $this->container->resolve('Response'),
                 $this->container->resolve('View')
             );
         });

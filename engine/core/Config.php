@@ -2,7 +2,7 @@
 
 namespace Excore\Core\Core;
 
-use Excore\Core\Config\Path;
+use Excore\Core\Helpers\Path;
 
 class Config
 {

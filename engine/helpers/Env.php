@@ -1,6 +1,7 @@
 <?php
 
-namespace Excore\Core\Config;
+namespace Excore\Core\Helpers;
+use Excore\Core\Helpers\Path;
 
 
 class Env

@@ -3,28 +3,30 @@
 namespace Excore\App;
 
 use Excore\App\Dependencies;
+use Excore\Core\Core\AppCore;
 use Excore\Core\Core\Container;
 use Excore\Core\Modules\Database\DB;
 use Excore\Core\Modules\Http\Request;
+use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\Router\Router;
 use Excore\Core\Modules\Session\Session;
 use Excore\Core\Modules\View\View;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
 
-class App
+
+class App extends AppCore
 {
-
-    public readonly Request $request;
-    public readonly View $view;
-    public readonly Router $router;
-    public readonly Session $session;
+    
     public readonly Container $container;
     public readonly DB $db;
+    public readonly Request $request;
+    public readonly Response $response;
+    public readonly Session $session;
+    public readonly View $view;
+    public readonly Router $router;
 
-    public  function __construct(protected string $environment)
+    public  function __construct()
     {
-        $this->container = new Container();
+        $this->container = Container::getInstance();
         (new Dependencies($this->container))->bind()->use();
     }
 
@@ -35,7 +37,7 @@ class App
             $this->development();
         }
 
-        $this->useHelpers();
+        $this->useHelpersFunctions();
         $this->container->resolve('Path');
         $this->container->resolve('Env');
         $this->container->resolve('Config');
@@ -49,20 +51,5 @@ class App
     }
 
 
-    private function environment(): string
-    {
-        return $this->environment;
-    }
 
-    private function development(): void
-    {
-        $whoops = new Run;
-        $whoops->pushHandler(new PrettyPageHandler);
-        $whoops->register();
-    }
-
-    private function useHelpers()
-    {
-        return require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'engine/helpers/helpers.php';
-    }
 }
