@@ -2,6 +2,7 @@
     <div class="container mx-auto" id="content">
         <div class="w-1/3 md:w-1/2 sm:w-full mx-auto shadow-lg rounded-lg  mt-10 p-5">
             <h2 class="text-center text-2xl text-blue-600 my-5">Вход в аккаунт</h2>
+            <div x-cloak x-show="message" x-text="message" x-transition class="py-2 px-5 mb-3 text-center rounded-md shadow bg-red-500 text-white mt-1 text-sm border-2 border-red-400"></div>
             <form class="text-center" @submit.prevent="register">
                 <div class="mb-4">
                     <label for="username" class="block text-gray-600 font-semibold">Имя пользователя:</label>
@@ -39,12 +40,13 @@
         errors: {},
         message: '',
         register() {
-            this.errors = {}
-            const data = new URLSearchParams();
-            data.append('username', this.username);
-            data.append('email', this.email);
-            data.append('password', this.password);
-            data.append('passwordConfirm', this.passwordConfirm);
+            this.errors = {};
+            const data = new URLSearchParams({
+                'username': this.username,
+                'email': this.email,
+                'password': this.password,
+                'passwordConfirm': this.passwordConfirm
+            });
 
             fetch('/register', {
                     method: 'POST',
@@ -60,27 +62,23 @@
                     return response.json();
                 })
                 .then(responseData => {
-                    if (responseData.success) {
-                        this.message = responseData.message;
+                    this.message = responseData.success ? responseData.message : (responseData.errors.text ?? responseData.message);
 
-                        if (responseData.redirect) {
-                            // Добавляем класс .fade-out для плавного исчезновения элемента
-                            const elementToFadeOut = document.getElementById('content'); // Замените 'your-element-id' на реальный идентификатор элемента
-                            if (elementToFadeOut) {
-                                elementToFadeOut.classList.add('fade-out');
-                                setTimeout(() => {
-                                    window.location.href = responseData.redirect; // После завершения анимации, переход на другую страницу
-                                }, 500); // Используйте тот же период, что и в CSS для анимации
-                            }
+                    if (responseData.success && responseData.redirect) {
+                        const elementToFadeOut = document.getElementById('content');
+                        if (elementToFadeOut) {
+                            elementToFadeOut.classList.add('fade-out');
+                            setTimeout(() => {
+                                window.location.href = responseData.redirect;
+                            }, 500);
                         }
                     } else {
                         this.errors = responseData.errors;
                     }
                 })
-
                 .catch(error => {
                     console.error(error);
                 });
         }
-    }
+    };
 </script>

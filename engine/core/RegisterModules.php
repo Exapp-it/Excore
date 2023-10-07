@@ -4,7 +4,7 @@ namespace Excore\Core\Core;
 
 use Excore\Core\Core\Container;
 
-class RegisterDependencies
+class RegisterModules
 {
     public $container;
 

@@ -2,6 +2,7 @@
 
 namespace Excore\Core\Modules\Validation;
 
+use Excore\Core\Helpers\DataFilter;
 use Excore\Core\Modules\Validation\Exceptions\ValidationException;
 
 class Validator
@@ -33,7 +34,10 @@ class Validator
                 continue;
             }
 
-            $fieldValue = $this->data[$fieldName];
+            $fieldValue = DataFilter::sanitizeString($this->data[$fieldName]);
+            $fieldValue = strip_tags($fieldValue);
+            $fieldValue = trim($fieldValue); 
+
             $fieldRules = is_array($fieldRules) ? $fieldRules : explode('|', $fieldRules);
 
             foreach ($fieldRules as $rule) {
@@ -91,6 +95,16 @@ class Validator
             $this->addError($fieldName, 'Некорректный формат email');
         }
     }
+
+    private function validateConfirmed($fieldName, $fieldValue, $confirmationFieldName)
+    {
+        $confirmationValue = $this->data[$confirmationFieldName] ?? null;
+
+        if ($fieldValue !== $confirmationValue) {
+            $this->addError($fieldName, "Пароль и его подтверждение не совпадают");
+        }
+    }
+
 
     private function validateMinLength($fieldName, $fieldValue, $minLength)
     {

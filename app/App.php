@@ -27,7 +27,7 @@ class App extends AppCore
     public  function __construct()
     {
         $this->container = Container::getInstance();
-        (new Dependencies($this->container))->bind()->use();
+        (new Modules($this->container))->bind()->use();
     }
 
     public function run()

@@ -9,10 +9,10 @@ class User extends Model
 {
     protected string $table = 'users';
 
-    public string $primaryKey;
-    public string $name;
+    public string $primaryKey = 'id';
+    public string $username;
     public string $email;
     public string $password;
-
-
+    public string $updated_at;
+    public string $created_at;
 }

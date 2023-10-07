@@ -3,15 +3,14 @@
 namespace Excore\Core\Core;
 
 use Excore\Core\Modules\Database\DB;
-
+use Excore\Core\Modules\Database\Collection;
 
 class Model
 {
     protected DB $db;
     protected Container $container;
     protected string $table = '';
-    public string $primaryKey;
-
+    public string $primaryKey = 'id';
 
     public function __construct()
     {
@@ -19,93 +18,96 @@ class Model
         $this->db = $this->container->resolve('DB');
     }
 
-    public function find($id)
+    public function find($id): ?object
     {
-        return $this->db->table($this->table)->where('id', $id)->get();
+        return $this->db
+            ->table($this->table)
+            ->where('id', $id)
+            ->first();
     }
 
-    public function all()
+    public function all(): Collection
     {
-        return $this->db->table($this->table)->get();
+        return $this->db
+            ->table($this->table)
+            ->get();
     }
 
-    public function create(array $data)
+    public function create(array $data): int
     {
-        return $this->db->table($this->table)->insert($data);
+        return $this->db
+            ->table($this->table)
+            ->insert($data);
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data): int
     {
-        return $this->db->table($this->table)->where('id', $id)->update($data);
+        return $this->db
+            ->table($this->table)
+            ->where('id', $id)
+            ->update($data);
     }
 
-    public function delete($id)
+    public function delete($id): int
     {
-        return $this->db->table($this->table)->where('id', $id)->delete($this->table    );
+        return $this->db
+            ->table($this->table)
+            ->where('id', $id)
+            ->delete();
     }
 
-    public function paginate($page, $perPage)
+    public function select(string $columns): self
     {
-        return $this->db->table($this->table)->paginate($page, $perPage);
+        $this->db->select($columns);
+        return $this;
     }
 
-    public function count()
+    public function first()
     {
-        return $this->db->table($this->table)->count();
+        return $this->db->first();
     }
 
-    public function orderBy($field, $order = 'ASC')
+    public function where(...$conditions): self
     {
-        return $this->db->table($this->table)->orderBy($field, $order);
+        $this->db->where(...$conditions);
+        return $this;
     }
 
-    public function where()
+    public function orWhere(...$conditions): self
     {
-        return $this->db->table($this->table)->where(...func_get_args());
+        $this->db->orWhere(...$conditions);
+        return $this;
     }
 
-    public function orWhere()
+    public function get(): Collection
     {
-        return $this->db->table($this->table)->orWhere(...func_get_args());
+        return $this->db->get();
     }
 
-    public function exec()
+    public function limit(int $limit, int $offset = null): self
     {
-        return $this->db->table($this->table)->exec();
+        $this->db->limit($limit, $offset);
+        return $this;
     }
 
-    public function lastId()
+    public function orderBy(string $fieldName, string $order = 'ASC'): self
     {
-        return $this->db->table($this->table)->lastId();
+        $this->db->orderBy($fieldName, $order);
+        return $this;
     }
 
-    public function getSQL()
+    public function count(): int
     {
-        return $this->db->table($this->table)->getSQL();
+        return $this->db->count();
     }
 
-    public function getCount()
+    public function paginate(int $page, int $limit): Collection
     {
-        return $this->db->table($this->table)->getCount();
+        return $this->db->paginate($page, $limit);
     }
 
-    public function rowCount()
+    public function PaginationInfo(): array
     {
-        return $this->db->table($this->table)->rowCount();
-    }
-
-    public function QGet()
-    {
-        return $this->db->table($this->table)->QGet();
-    }
-
-    public function QPaginate($page, $perPage)
-    {
-        return $this->db->table($this->table)->QPaginate($page, $perPage);
-    }
-
-    public function PaginationInfo()
-    {
-        return $this->db->table($this->table)->PaginationInfo();
+        return $this->db->PaginationInfo();
     }
 }

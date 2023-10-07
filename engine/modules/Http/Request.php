@@ -58,6 +58,20 @@ class Request
         return $this->get ?? [];
     }
 
+    public function input($key, $default = null)
+    {
+        if (isset($this->post[$key])) {
+            return $this->post[$key];
+        }
+
+        if (isset($this->get[$key])) {
+            return $this->get[$key];
+        }
+
+        return $default;
+    }
+
+
     public function cookies(): array
     {
         return $this->cookies ?? [];

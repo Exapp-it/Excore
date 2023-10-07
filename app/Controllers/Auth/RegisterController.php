@@ -3,6 +3,8 @@
 namespace Excore\App\Controllers\Auth;
 
 use Excore\App\Controllers\Controller;
+use Excore\App\Models\User;
+use Excore\Core\Helpers\Date;
 use Excore\Core\Modules\Validation\Validator;
 
 class RegisterController extends Controller
@@ -17,23 +19,64 @@ class RegisterController extends Controller
     {
         $validator =  Validator::init($this->request->post());
         $validator->rules([
-            'username' => 'required',
-            'email' => 'required', 'email',
-            'password' => 'required',
-            'passwordConfirm' => 'required',
+            'username' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'passwordConfirm' => ['required', 'confirmed:password'],
         ])->validate();
 
-        if ($validator->isValid()) {
-            return $this->response->sendJson([
-                'message' => "Данные прошли валидацию успешно.",
-                'success' => true,
-                'redirect' => '/login',
-            ]);
-        } else {
-            return $this->response->sendJson([
-                'message' => "Ошибки валидации",
-                'errors' => $validator->errors()
-            ]);
+        if (!$validator->isValid()) {
+            return $this->fail($validator->errors());
         }
+
+        if ($this->exists()) {
+            return $this->fail(['text' => 'Пользователь с таким email уже существует']);
+        }
+
+        $this->createRegister();
+        return $this->success();
+    }
+
+    private function exists()
+    {
+        $user = new User();
+        $userExists = $user->where('email', $this->request->input('email'))
+            ->orWhere('email', $this->request->input('email'))
+            ->first();
+
+        return !is_null($userExists);
+    }
+
+
+
+
+
+    private function createRegister()
+    {
+        $user = new User();
+        $user->create([
+            'username' => $this->request->input('username'),
+            'email' => $this->request->input('email'),
+            'password' => $this->request->input('password'),
+            'updated_at' => Date::now()->toString(),
+            'created_at' => Date::now()->toString(),
+        ]);
+    }
+
+    private function success()
+    {
+        return $this->response->sendJson([
+            'message' => "Данные прошли валидацию успешно.",
+            'success' => true,
+            'redirect' => '/login',
+        ]);
+    }
+
+    private function fail($errors)
+    {
+        return $this->response->sendJson([
+            'message' => "Ошибка...",
+            'errors' => $errors,
+        ]);
     }
 }
