@@ -87,6 +87,15 @@ class Request
         return $this->headers ?? [];
     }
 
+    public function getHeaders($key = null)
+    {
+        if ($key === null) {
+            return $this->headers;
+        }
+
+        return $this->headers[$key] ?? null;
+    }
+
     public function fullUrl()
     {
         $protocol = isset($this->server['HTTPS']) && $this->server['HTTPS'] === 'on' ? 'https' : 'http';

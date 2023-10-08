@@ -50,6 +50,13 @@ class View
         }
     }
 
+    public static function errorPage($code)
+    {
+        http_response_code($code);
+        require(Path::views() . "errors/{$code}.exc.php");
+        exit;
+    }
+
     private function getTemplateFilePath(string $template): string
     {
         return Path::views() . $template . '.exc.php';

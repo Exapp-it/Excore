@@ -12,8 +12,11 @@ class RegisterController extends Controller
 {
     public function index()
     {
+        $csrfToken =  hash::generateCsrfToken();
+
+
         $this->view->title('Регистрация');
-        return $this->view->render('auth/register');
+        return $this->view->render('auth/register', ['csrfToken' => $csrfToken]);
     }
 
     public function handler()

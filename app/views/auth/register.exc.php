@@ -3,7 +3,8 @@
         <div class="w-1/3 md:w-1/2 sm:w-full mx-auto shadow-lg rounded-lg  mt-10 p-5">
             <h2 class="text-center text-2xl text-blue-600 my-5">Вход в аккаунт</h2>
             <div x-cloak x-show="message" x-text="message" x-transition class="py-2 px-5 mb-3 text-center rounded-md shadow bg-red-500 text-white mt-1 text-sm border-2 border-red-400"></div>
-            <form class="text-center" method="POST" action="/register">
+            <form class="text-center" @submit.prevent="sendRequest">
+                <input type="hidden" x-model="csrfToken" x-init="csrfToken = '<?php echo $csrfToken ?>'">
                 <div class="mb-4">
                     <label for="username" class="block text-gray-600 font-semibold">Имя пользователя:</label>
                     <input name="username" x-model="username" x-bind:class="{'border-red-300': errors.username, 'border-gray-300': !errors.username,}" type="text" id="username" class="border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400 focus:border-2 w-full">
@@ -39,7 +40,8 @@
         passwordConfirm: '',
         errors: {},
         message: '',
-        register() {
+        csrfToken: '',
+        sendRequest() {
             this.errors = {};
             const data = new URLSearchParams({
                 'username': this.username,
@@ -51,7 +53,8 @@
             fetch('/register', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-Token': this.csrfToken
                     },
                     body: data
                 })

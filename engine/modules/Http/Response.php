@@ -1,11 +1,15 @@
 <?php
 
 namespace Excore\Core\Modules\Http;
+
 use Exception;
 
 
 class Response
 {
+    const CSRF_HEADER_NAME = "X-Csrf-Token";
+
+
     private $statusCode;
     private $headers = [];
     private $body;

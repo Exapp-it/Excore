@@ -44,6 +44,7 @@ class Modules extends ModulesInjection
             return  Router::init(
                 $this->container->resolve('Request'),
                 $this->container->resolve('Response'),
+                $this->container->resolve('Session'),
                 $this->container->resolve('View')
             );
         });
