@@ -1,10 +1,10 @@
 <?php
 
-namespace Excore\Core\Core\Exception;
+namespace Excore\Core\Modules\Database\Exceptions;
 
 use Exception;
 
-class ContainerException extends Exception
+class DatabaseException extends Exception
 {
     public function __construct($message)
     {

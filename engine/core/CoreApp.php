@@ -6,7 +6,7 @@ namespace Excore\Core\Core;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-abstract class AppCore
+abstract class CoreApp
 {
 
     protected string $environment = '';

@@ -30,28 +30,25 @@ class RegisterController extends Controller
         }
 
         if ($this->exists()) {
-            return $this->fail(['text' => 'Пользователь с таким email уже существует']);
+            return $this->fail(['text' => 'Пользователь с такими данными уже существует']);
         }
 
-        $this->createRegister();
+        $this->store();
         return $this->success();
     }
 
     private function exists()
     {
-        $user = new User();
-        $userExists = $user->where('email', $this->request->input('email'))
-            ->orWhere('email', $this->request->input('email'))
+        $userExists = (new User())
+            ->where('email', '=', $this->request->input('email'))
+            ->orWhere('username', '=', $this->request->input('username'))
             ->first();
 
         return !is_null($userExists);
     }
 
 
-
-
-
-    private function createRegister()
+    private function store()
     {
         $user = new User();
         $user->create([

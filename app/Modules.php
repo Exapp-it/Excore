@@ -2,11 +2,11 @@
 
 namespace Excore\App;
 
+use Excore\Core\Core\ModulesInjection;
 use Excore\Core\Helpers\Env;
 use Excore\Core\Helpers\Path;
 use Excore\Core\Helpers\Assets;
 use Excore\Core\Core\Config;
-use Excore\Core\Core\RegisterModules;
 use Excore\Core\Modules\Database\DB;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Http\Response;
@@ -15,7 +15,7 @@ use Excore\Core\Modules\Session\Session;
 use Excore\Core\Modules\View\View;
 
 
-class Modules extends RegisterModules
+class Modules extends ModulesInjection
 {
     public function bind()
     {

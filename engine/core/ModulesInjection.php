@@ -4,7 +4,7 @@ namespace Excore\Core\Core;
 
 use Excore\Core\Core\Container;
 
-class RegisterModules
+class ModulesInjection
 {
     public $container;
 

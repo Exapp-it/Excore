@@ -30,14 +30,11 @@ class Validator
     public function validate()
     {
         foreach ($this->rules as $fieldName => $fieldRules) {
-            if (!array_key_exists($fieldName, $this->data)) {
-                continue;
-            }
+            // if (!array_key_exists($fieldName, $this->data)) {
+            //     continue;
+            // }
 
-            $fieldValue = DataFilter::sanitizeString($this->data[$fieldName]);
-            $fieldValue = strip_tags($fieldValue);
-            $fieldValue = trim($fieldValue); 
-
+            $fieldValue = htmlspecialchars(trim(strip_tags($this->data[$fieldName] ?? '')), ENT_QUOTES, 'UTF-8');
             $fieldRules = is_array($fieldRules) ? $fieldRules : explode('|', $fieldRules);
 
             foreach ($fieldRules as $rule) {
@@ -84,7 +81,7 @@ class Validator
 
     private function validateRequired($fieldName, $fieldValue)
     {
-        if (empty($fieldValue)) {
+        if (empty($fieldValue) || is_null($fieldValue)) {
             $this->addError($fieldName, "Поле $fieldName обязательно для заполнения");
         }
     }

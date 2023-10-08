@@ -3,7 +3,7 @@
 namespace Excore\App;
 
 use Excore\App\Dependencies;
-use Excore\Core\Core\AppCore;
+use Excore\Core\Core\CoreApp;
 use Excore\Core\Core\Container;
 use Excore\Core\Modules\Database\DB;
 use Excore\Core\Modules\Http\Request;
@@ -13,9 +13,9 @@ use Excore\Core\Modules\Session\Session;
 use Excore\Core\Modules\View\View;
 
 
-class App extends AppCore
+class App extends CoreApp
 {
-    
+
     public readonly Container $container;
     public readonly DB $db;
     public readonly Request $request;
@@ -27,7 +27,8 @@ class App extends AppCore
     public  function __construct()
     {
         $this->container = Container::getInstance();
-        (new Modules($this->container))->bind()->use();
+        $modulesInjecition = new Modules($this->container);
+        $modulesInjecition->bind()->use();
     }
 
     public function run()
@@ -49,7 +50,4 @@ class App extends AppCore
         $this->router = $this->container->resolve('Router');
         $this->router->dispatch();
     }
-
-
-
 }

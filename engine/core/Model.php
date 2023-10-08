@@ -3,12 +3,13 @@
 namespace Excore\Core\Core;
 
 use Excore\Core\Modules\Database\DB;
-use Excore\Core\Modules\Database\Collection;
+use Excore\Core\Modules\Database\QueryBuilder;
 
 class Model
 {
     protected DB $db;
     protected Container $container;
+    protected QueryBuilder $queryBuilder;
     protected string $table = '';
     public string $primaryKey = 'id';
 
@@ -16,98 +17,92 @@ class Model
     {
         $this->container = Container::getInstance();
         $this->db = $this->container->resolve('DB');
+        $this->queryBuilder = new QueryBuilder($this->db, $this->table);
     }
 
-    public function find($id): ?object
+    public function find($id)
     {
-        return $this->db
-            ->table($this->table)
-            ->where('id', $id)
-            ->first();
-    }
-
-    public function all(): Collection
-    {
-        return $this->db
-            ->table($this->table)
+        return $this->queryBuilder->select(['*'])
+            ->where($this->primaryKey, '=', $id)
             ->get();
     }
 
-    public function create(array $data): int
-    {
-        return $this->db
-            ->table($this->table)
-            ->insert($data);
-    }
-
-    public function update($id, array $data): int
-    {
-        return $this->db
-            ->table($this->table)
-            ->where('id', $id)
-            ->update($data);
-    }
-
-    public function delete($id): int
-    {
-        return $this->db
-            ->table($this->table)
-            ->where('id', $id)
-            ->delete();
-    }
-
-    public function select(string $columns): self
-    {
-        $this->db->select($columns);
-        return $this;
-    }
 
     public function first()
     {
-        return $this->db->first();
+        return $this->queryBuilder
+            ->select(['*'])
+            ->limit(1)
+            ->first();
     }
 
-    public function where(...$conditions): self
+
+
+    public function create(array $data)
     {
-        $this->db->where(...$conditions);
-        return $this;
+        return $this->queryBuilder->create($data);
     }
 
-    public function orWhere(...$conditions): self
+    public function update($id, array $data)
     {
-        $this->db->orWhere(...$conditions);
-        return $this;
+        return $this->queryBuilder->update($data, "{$this->primaryKey} = :id", [':id' => $id]);
     }
 
-    public function get(): Collection
+    public function delete($id)
     {
-        return $this->db->get();
+        return $this->queryBuilder->delete("{$this->primaryKey} = :id", [':id' => $id]);
     }
 
-    public function limit(int $limit, int $offset = null): self
+    public function all()
     {
-        $this->db->limit($limit, $offset);
-        return $this;
+        return $this->queryBuilder->select(['*'])->get();
     }
 
-    public function orderBy(string $fieldName, string $order = 'ASC'): self
+    public function where($column, $operator, $value)
     {
-        $this->db->orderBy($fieldName, $order);
-        return $this;
+        return $this->queryBuilder->where($column, $operator, $value);
     }
 
-    public function count(): int
+    public function orWhere($column, $operator, $value)
     {
-        return $this->db->count();
+        return $this->queryBuilder->orWhere($column, $operator, $value);
     }
 
-    public function paginate(int $page, int $limit): Collection
+    public function orderBy($column, $direction = 'ASC')
     {
-        return $this->db->paginate($page, $limit);
+        return $this->queryBuilder->orderBy($column, $direction);
     }
 
-    public function PaginationInfo(): array
+    public function limit($limit)
     {
-        return $this->db->PaginationInfo();
+        return $this->queryBuilder->limit($limit);
+    }
+
+    public function offset($offset)
+    {
+        return $this->queryBuilder->offset($offset);
+    }
+
+    public function paginate($perPage, $currentPage)
+    {
+        $offset = ($currentPage - 1) * $perPage;
+
+        $data = $this->queryBuilder
+            ->select(['*'])
+            ->limit($perPage)
+            ->offset($offset)
+            ->get();
+
+        $totalItems = count($data);
+
+        $totalPages = ceil($totalItems / $perPage);
+
+        return [
+            'data' => $data,
+            'current_page' => $currentPage,
+            'per_page' => $perPage,
+            'total_items' => $totalItems,
+            'total_pages' => $totalPages,
+        ];
     }
 }
