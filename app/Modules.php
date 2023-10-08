@@ -4,6 +4,7 @@ namespace Excore\App;
 
 use Excore\Core\Core\ModulesInjection;
 use Excore\Core\Helpers\Env;
+use Excore\Core\Helpers\Hash;
 use Excore\Core\Helpers\Path;
 use Excore\Core\Helpers\Assets;
 use Excore\Core\Core\Config;
@@ -67,6 +68,10 @@ class Modules extends ModulesInjection
 
         $this->container->register('Config', function () {
             return  Config::init(Path::config());
+        });
+
+        $this->container->register('Hash', function () {
+            return  Hash::init($this->container->resolve('Session'));
         });
 
         return $this;

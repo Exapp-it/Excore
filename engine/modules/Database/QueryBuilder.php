@@ -86,14 +86,14 @@ class QueryBuilder
 
     public function where(string $column, string $operator, $value)
     {
-        $this->parameters[":$column"] = $value; // Сохраняем параметр
+        $this->parameters[":$column"] = $value; 
         $this->where[] = empty($this->where) ? "$column $operator :$column" : "AND $column $operator :$column";
         return $this;
     }
 
     public function orWhere(string $column, string $operator, $value)
     {
-        $this->parameters[":$column"] = $value; // Сохраняем параметр
+        $this->parameters[":$column"] = $value; 
         $this->where[] = empty($this->where) ? "$column $operator :$column" : "OR $column $operator :$column";
         return $this;
     }

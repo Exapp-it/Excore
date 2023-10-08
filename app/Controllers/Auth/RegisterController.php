@@ -5,6 +5,7 @@ namespace Excore\App\Controllers\Auth;
 use Excore\App\Controllers\Controller;
 use Excore\App\Models\User;
 use Excore\Core\Helpers\Date;
+use Excore\Core\Helpers\Hash;
 use Excore\Core\Modules\Validation\Validator;
 
 class RegisterController extends Controller
@@ -29,7 +30,7 @@ class RegisterController extends Controller
             return $this->fail($validator->errors());
         }
 
-        if ($this->exists()) {
+        if ($this->userExists()) {
             return $this->fail(['text' => 'Пользователь с такими данными уже существует']);
         }
 
@@ -37,7 +38,7 @@ class RegisterController extends Controller
         return $this->success();
     }
 
-    private function exists()
+    private function userExists()
     {
         $userExists = (new User())
             ->where('email', '=', $this->request->input('email'))
@@ -54,7 +55,7 @@ class RegisterController extends Controller
         $user->create([
             'username' => $this->request->input('username'),
             'email' => $this->request->input('email'),
-            'password' => $this->request->input('password'),
+            'password' => Hash::passwordHash($this->request->input('password')),
             'updated_at' => Date::now()->toString(),
             'created_at' => Date::now()->toString(),
         ]);

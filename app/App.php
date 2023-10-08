@@ -43,6 +43,7 @@ class App extends CoreApp
         $this->container->resolve('Env');
         $this->container->resolve('Config');
         $this->container->resolve('Assets');
+        $this->container->resolve('Hash');
         $this->db = $this->container->resolve('DB');
         $this->request = $this->container->resolve('Request');
         $this->session = $this->container->resolve('Session');
