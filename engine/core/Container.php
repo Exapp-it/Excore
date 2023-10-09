@@ -1,8 +1,8 @@
 <?php
 
 namespace Excore\Core\Core;
+use Excore\Core\Core\Exceptions\ContainerException;
 
-use Excore\Core\Core\Exception\ContainerException;
 
 class Container
 {
@@ -29,7 +29,6 @@ class Container
     public function resolve($name)
     {
         if (isset($this->dependencies[$name])) {
-            // Если зависимость уже была создана, вернуть её
             if (is_callable($this->dependencies[$name])) {
                 $this->dependencies[$name] = $this->dependencies[$name]();
             }
