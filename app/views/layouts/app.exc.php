@@ -7,19 +7,21 @@
     <title><ex-title></title>
     <ex-assets>
         <?php echo \Excore\Core\Helpers\Assets::alpineCDN(); ?>
+        <ex-scripts>
+
 
 </head>
 
 <body>
-
+    <!-- 
     <ex-header>
-    <ex-sidebar>    
-        <main>
-            <ex-content>
-        </main>
+    <ex-sidebar>     -->
+    <main>
+        <ex-content>
+    </main>
 
 
-        <ex-scripts>
+
 
 
 </body>
