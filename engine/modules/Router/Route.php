@@ -6,8 +6,6 @@ namespace Excore\Core\Modules\Router;
 class Route
 {
 
-    private $middleware = [];
-
 
     public function __construct(
         private string $uri,
@@ -29,11 +27,6 @@ class Route
         return new static($uri, 'POST', $action);
     }
 
-    public function middleware($middleware)
-    {
-        $this->middleware[] = $middleware;
-        return $this;
-    }
 
     public function getMethod()
     {
@@ -50,8 +43,4 @@ class Route
         return $this->uri;
     }
 
-    public function getMiddleware()
-    {
-        return $this->middleware;
-    }
 }

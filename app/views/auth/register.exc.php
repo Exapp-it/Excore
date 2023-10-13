@@ -60,8 +60,9 @@
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Ошибка при отправке данных. Код статуса: ' + response.status);
+                        throw new Error('Ошибка. Код статуса: ' + response.status);
                     }
+
                     return response.json();
                 })
                 .then(responseData => {

@@ -102,6 +102,7 @@ class Hash
 
     public static function generateCsrfToken()
     {
+        self::clearCsrfToken();
         $token = bin2hex(random_bytes(32));
         self::$session->set('csrf_token', $token);
         return $token;
@@ -112,7 +113,11 @@ class Hash
         if (!self::$session->has('csrf_token') || !hash_equals(self::$session->get('csrf_token'), $userToken)) {
             return false;
         }
-        self::$session->remove('csrf_token');
         return true;
+    }
+
+    private static function clearCsrfToken()
+    {
+        self::$session->remove('csrf_token');
     }
 }
