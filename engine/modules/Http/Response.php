@@ -80,12 +80,13 @@ class Response
     public function redirect($url, $statusCode = 302)
     {
         $this->setStatus($statusCode);
-        $this->setHeader('Location', $url);
-        return $this;
+        header("Location:  {$url}");
+        exit;
     }
 
     public function sendJson($data)
     {
-        return $this->setJsonContent($data)->send();
+       $this->setJsonContent($data)->send();
+       exit;
     }
 }

@@ -20,7 +20,7 @@ class DB
             $dsn = "mysql:host={$options['host']};dbname={$options['db']};charset=utf8";
             $this->pdo = new PDO($dsn, $options['user'], $options['password']);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $this->isConnected = true;
         } catch (PDOException $e) {
             throw new DatabaseException("Error establishing a database connection: " . $e->getMessage());
@@ -35,7 +35,7 @@ class DB
         return self::$instance;
     }
 
-    public function query(string $query, array $parameters = [], $mode = PDO::FETCH_OBJ)
+    public function query(string $query, array $parameters = [], $mode = PDO::FETCH_ASSOC)
     {
         $this->initConnection();
         $this->initStatement($query);
@@ -64,12 +64,12 @@ class DB
         }
     }
 
-    public function fetch(string $query, array $parameters = [], $mode = PDO::FETCH_OBJ)
+    public function fetch(string $query, array $parameters = [], $mode = PDO::FETCH_ASSOC)
     {
         return $this->query($query, $parameters, $mode);
     }
 
-    public function fetchAll(string $query, array $parameters = [], $mode = PDO::FETCH_OBJ)
+    public function fetchAll(string $query, array $parameters = [], $mode = PDO::FETCH_ASSOC)
     {
         return $this->query($query, $parameters, $mode);
     }
@@ -79,7 +79,7 @@ class DB
         return $this->pdo->lastInsertId();
     }
 
-    public function paginate(string $query, int $page, int $perPage, array $parameters = [], $mode = PDO::FETCH_OBJ)
+    public function paginate(string $query, int $page, int $perPage, array $parameters = [], $mode = PDO::FETCH_ASSOC)
     {
         $offset = ($page - 1) * $perPage;
         $query .= " LIMIT :limit OFFSET :offset";

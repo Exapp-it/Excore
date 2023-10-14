@@ -2,6 +2,7 @@
 
 namespace Excore\Core\Modules\Router;
 
+use Excore\Core\Core\Config;
 use Excore\Core\Helpers\Hash;
 use Excore\Core\Helpers\Path;
 use Excore\Core\Modules\Http\Request;
@@ -18,6 +19,8 @@ class Router
         'POST' => [],
     ];
 
+    protected array $bridges;
+
     public function __construct(
         protected Request $request,
         protected Response $response,
@@ -25,6 +28,7 @@ class Router
         protected View $view,
     ) {
         $this->buildRoute();
+        $this->bridges = $this->getBridges();
     }
 
 
@@ -42,7 +46,16 @@ class Router
             View::errorPage(404);
         }
 
-        // $this->checkCsrfToken();
+        if ($this->bridges) {
+            $nextHandler = null;
+
+            foreach ($this->bridges as $class) {
+                $bridge = new $class();
+                $bridge->handler($this->request, $this->response, $nextHandler);
+                $nextHandler = $bridge;
+            }
+        }
+
 
         if (is_array($route->getAction())) {
             [$controller, $action] = $route->getAction();
@@ -53,18 +66,6 @@ class Router
         }
     }
 
-    protected function checkCsrfToken()
-    {
-        if ($this->request->method() === "POST") {
-            $csrfToken = $this->request->getHeaders(Response::CSRF_HEADER_NAME);
-            if (!Hash::verifyCsrfToken($csrfToken)) {
-                $this->response->setStatus(419);
-                return $this->response->sendJson([
-                    'message' => 'Invalid CSRF token',
-                ]);
-            }
-        }
-    }
 
     private function findRoute(string $uri, string $method): Route|false
     {
@@ -92,5 +93,11 @@ class Router
     {
 
         return include_once routesPath('routes');
+    }
+
+    private function getBridges(): array
+    {
+
+        return Config::bridges()['default'];
     }
 }

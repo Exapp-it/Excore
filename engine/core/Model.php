@@ -13,27 +13,46 @@ class Model
     protected string $table = '';
     public string $primaryKey = 'id';
 
-    public function __construct()
+    protected int $id;
+
+
+    public function __construct($data)
     {
         $this->container = Container::getInstance();
         $this->db = $this->container->resolve('DB');
         $this->queryBuilder = new QueryBuilder($this->db, $this->table);
+        foreach ($data as $attribute => $value) {
+            if (property_exists($this, $attribute)) {
+                $this->$attribute = $value;
+            }
+        }
     }
 
     public function find($id)
     {
-        return $this->queryBuilder->select(['*'])
-            ->where($this->primaryKey, '=', $id)
-            ->get();
+        $data = $this->queryBuilder
+            ->select(['*'])
+            ->where($this->primaryKey, $id, '=')
+            ->first();
+
+        if ($data) {
+            return new static($data);
+        }
+        return null;
     }
 
 
     public function first()
     {
-        return $this->queryBuilder
+        $data = $this->queryBuilder
             ->select(['*'])
             ->limit(1)
             ->first();
+
+        if ($data) {
+            return new static($data);
+        }
+        return null;
     }
 
 
@@ -43,44 +62,54 @@ class Model
         return $this->queryBuilder->create($data);
     }
 
-    public function update($id, array $data)
+    public function update(array $data)
     {
-        return $this->queryBuilder->update($data, "{$this->primaryKey} = :id", [':id' => $id]);
+        return $this->queryBuilder->update($data, "{$this->primaryKey} = :id", [':id' => $this->id]);
     }
 
-    public function delete($id)
+    public function delete()
     {
-        return $this->queryBuilder->delete("{$this->primaryKey} = :id", [':id' => $id]);
+        return $this->queryBuilder->delete("{$this->primaryKey} = :id", [':id' => $this->id]);
     }
 
     public function all()
     {
-        return $this->queryBuilder->select(['*'])->get();
+        $data = $this->queryBuilder->select(['*'])->get();
+        
+        foreach ($data as $value) {
+            $instance[] = new static($value);
+        }
+        return $instance;
     }
 
     public function where($column, $value, $operator = '=')
     {
-        return $this->queryBuilder->where($column, $value, $operator);
+        $this->queryBuilder->where($column, $value, $operator);
+        return $this;
     }
 
     public function orWhere($column, $value, $operator = '=')
     {
-        return $this->queryBuilder->orWhere($column, $value, $operator);
+        $this->queryBuilder->orWhere($column, $value, $operator);
+        return $this;
     }
 
     public function orderBy($column, $direction = 'ASC')
     {
-        return $this->queryBuilder->orderBy($column, $direction);
+        $this->queryBuilder->orderBy($column, $direction);
+        return $this;
     }
 
     public function limit($limit)
     {
-        return $this->queryBuilder->limit($limit);
+        $this->queryBuilder->limit($limit);
+        return $this;
     }
 
     public function offset($offset)
     {
-        return $this->queryBuilder->offset($offset);
+        $this->queryBuilder->offset($offset);
+        return $this;
     }
 
     public function paginate($perPage, $currentPage)

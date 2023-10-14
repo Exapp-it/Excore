@@ -10,7 +10,6 @@ class MainController extends Controller
 {
     public function index()
     {
-
         $this->view->title('Главная страница');
         $this->view->render('main/home');
     }

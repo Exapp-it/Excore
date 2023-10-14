@@ -6,6 +6,7 @@ namespace Excore\Core\Modules\Router;
 class Route
 {
 
+    protected array $bridges = [];
 
     public function __construct(
         private string $uri,
@@ -43,4 +44,14 @@ class Route
         return $this->uri;
     }
 
+    public function getBridges()
+    {
+        return $this->bridges;
+    }
+
+    public function bridge(string $name)
+    {
+        $this->bridges[] = $name;
+        return $this;
+    }
 }

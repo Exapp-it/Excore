@@ -38,7 +38,6 @@ class LoginController extends Controller
         }
 
         $this->service->auth();
-
         return $this->service->success();
     }
 }

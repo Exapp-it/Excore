@@ -2,8 +2,8 @@
     <div class="container mx-auto" id="content">
         <div class="w-1/3 md:w-1/2 sm:w-full mx-auto shadow-lg rounded-lg  mt-10 p-5">
             <h2 class="text-center text-2xl text-blue-600 my-5">Вход в аккаунт</h2>
-            <div x-cloak x-show="message" x-text="message" x-transition class="py-2 px-5 mb-3 text-center rounded-md shadow bg-red-500 text-white mt-1 text-sm border-2 border-red-400"></div>
-            <form class="text-center" action="/login" method="POST">
+            <div x-cloak x-show="info" x-text="info" x-transition class="py-2 px-5 mb-3 text-center rounded-md shadow bg-red-500 text-white mt-1 text-sm border-2 border-red-400"></div>
+            <form class="text-center" @submit.prevent="sendRequest">
                 <input type="hidden" x-model="csrfToken" x-init="csrfToken = '<?php echo $csrfToken ?>'">
 
                 <div class="mb-4">

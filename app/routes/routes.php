@@ -1,8 +1,8 @@
 <?php
 
-use Excore\App\Controllers\Auth\DashboardController;
 use Excore\App\Controllers\Auth\LoginController;
 use Excore\App\Controllers\Auth\RegisterController;
+use Excore\App\Controllers\Dashboard\DashboardController;
 use Excore\App\Controllers\MainController;
 use Excore\Core\Modules\Router\Route;
 
@@ -17,5 +17,5 @@ return [
     Route::post('register', [RegisterController::class, 'handler']),
 
     // Dashboard
-    Route::get('dashboard', [DashboardController::class, 'index']),
+    Route::get('dashboard', [DashboardController::class, 'index'])->bridge('auth'),
 ];

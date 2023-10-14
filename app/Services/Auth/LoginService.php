@@ -25,7 +25,9 @@ class LoginService
 
     public function auth()
     {
-
+        $authToken = $this->generateAuthToken();
+        $this->user->update(['auth_token' => $authToken]);
+        $this->session->set('user', $authToken);
     }
 
     public function validate()
@@ -61,8 +63,8 @@ class LoginService
     public function success()
     {
         return $this->response->sendJson([
-            'message' => "Авторизация прошло успешно.",
             'success' => true,
+            'info' => "Авторизация прошло успешно.",
             'redirect' => '/dashboard',
         ]);
     }
@@ -70,15 +72,19 @@ class LoginService
     public function fail()
     {
         return $this->response->sendJson([
-            'message' => "Ошибка...",
-            'errors' => $this->errors,
+            'success' => false,
+            'info' => "Ошибка...",
+            'messages' => $this->errors,
         ]);
     }
 
     private function userInit()
     {
-        $this->user = (new User())
-            ->where('email', $this->request->input('email'))
-            ->first();
+        $this->user = (new User())->getByEmail($this->request->input('email'));
+    }
+
+    private function generateAuthToken()
+    {
+        return Hash::generateToken($this->user->id);
     }
 }

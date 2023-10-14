@@ -27,24 +27,23 @@ const registerComponent = {
         if (!response.ok) {
           throw new Error("Ошибка. Код статуса: " + response.status);
         }
-
         return response.json();
       })
       .then((responseData) => {
-        this.message = responseData.success
-          ? responseData.message
-          : responseData.errors.text ?? responseData.message;
-
-        if (responseData.success && responseData.redirect) {
-          const elementToFadeOut = document.getElementById("content");
-          if (elementToFadeOut) {
-            elementToFadeOut.classList.add("fade-out");
-            setTimeout(() => {
-              window.location.href = responseData.redirect;
-            }, 500);
+        if (responseData.success) {
+          this.info = responseData.info;
+          if (responseData.redirect) {
+            const elementToFadeOut = document.getElementById("content");
+            if (elementToFadeOut) {
+              elementToFadeOut.classList.add("fade-out");
+              setTimeout(() => {
+                window.location.href = responseData.redirect;
+              }, 500);
+            }
           }
         } else {
-          this.errors = responseData.errors;
+          this.info = responseData.info;
+          this.errors = responseData.messages;
         }
       })
       .catch((error) => {

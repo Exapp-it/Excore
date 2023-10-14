@@ -1,6 +1,6 @@
 <?php
 
-namespace Excore\App\Controllers\Auth;
+namespace Excore\App\Controllers\Dashboard;
 
 use Excore\App\Controllers\Controller;
 
@@ -10,6 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return 'Dashboard';
+        $this->view->title('Личный кабинет');
+        return $this->view->render('dashboard/index');
     }
 }

@@ -11,6 +11,8 @@ use RuntimeException;
 class Hash
 {
 
+    const TOKEN_LENGTH = 128;
+
     private static Session $session;
 
     public function __construct(Session $session)
@@ -43,6 +45,20 @@ class Hash
         );
 
         return $uuid;
+    }
+
+    public static function generateToken($userId)
+    {
+        $length = self::TOKEN_LENGTH;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $token = '';
+
+        for ($i = strlen($userId); $i < $length; $i++) {
+            $token .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        $token .= $userId;
+        return $token;
     }
 
     public static function passwordHash(string $password)

@@ -7,11 +7,13 @@ use Excore\Core\Helpers\Path;
 class Config
 {
     private static array $db;
+    private static array $bridges;
 
     public function __construct(
         private  $path
     ) {
         self::$db = $this->load('db');
+        self::$bridges = $this->load('bridges');
     }
 
     public static function init($path)
@@ -22,6 +24,11 @@ class Config
     public static function db()
     {
         return self::$db;
+    }
+
+    public static function bridges()
+    {
+        return self::$bridges;
     }
 
 
