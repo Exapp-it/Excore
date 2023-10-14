@@ -4,31 +4,41 @@ namespace Excore\App\Controllers\Auth;
 
 use Exception;
 use Excore\App\Controllers\Controller;
-use Excore\Core\Modules\Http\Request;
+use Excore\App\Services\Auth\LoginService;
+use Excore\Core\Helpers\Hash;
+
 
 class LoginController extends Controller
 {
+
+    private ?LoginService $service = null;
+
+
+
+
     public function index()
     {
+        $csrfToken =  Hash::generateCsrfToken();
+
+
         $this->view->title('Авторизация');
-        return $this->view->render('auth/login', ['name' => 'Sam']);
+        return $this->view->render('auth/login', ['csrfToken' => $csrfToken]);
     }
 
-    public function handler(Request $request)
+    public function handler()
     {
-        // Получите POST-данные
-        $postData = $request->post();
+        $this->service = new LoginService($this->request, $this->response, $this->session);
 
-        // Проверьте, что данные были успешно получены
-        if (!empty($postData)) {
-            // Здесь проводите проверку авторизации
-            // Предположим, что авторизация всегда успешна в этом примере
-            $response = ['message' => 'Авторизация успешна'];
-        } else {
-            $response = ['message' => 'Ошибка: Нет данных POST',];
+        if (!$this->service->validate()) {
+            return $this->service->fail();
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
+        if (!$this->service->userVerify()) {
+            return $this->service->fail();
+        }
+
+        $this->service->auth();
+
+        return $this->service->success();
     }
 }

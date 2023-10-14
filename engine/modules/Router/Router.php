@@ -42,7 +42,7 @@ class Router
             View::errorPage(404);
         }
 
-        $this->checkCsrfToken();
+        // $this->checkCsrfToken();
 
         if (is_array($route->getAction())) {
             [$controller, $action] = $route->getAction();

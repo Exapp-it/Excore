@@ -35,7 +35,7 @@ class DB
         return self::$instance;
     }
 
-    public function query(string $query, array $parameters = [], $mode = PDO::FETCH_ASSOC)
+    public function query(string $query, array $parameters = [], $mode = PDO::FETCH_OBJ)
     {
         $this->initConnection();
         $this->initStatement($query);
@@ -64,12 +64,12 @@ class DB
         }
     }
 
-    public function fetch(string $query, array $parameters = [], $mode = PDO::FETCH_ASSOC)
+    public function fetch(string $query, array $parameters = [], $mode = PDO::FETCH_OBJ)
     {
         return $this->query($query, $parameters, $mode);
     }
 
-    public function fetchAll(string $query, array $parameters = [], $mode = PDO::FETCH_ASSOC)
+    public function fetchAll(string $query, array $parameters = [], $mode = PDO::FETCH_OBJ)
     {
         return $this->query($query, $parameters, $mode);
     }
@@ -79,7 +79,7 @@ class DB
         return $this->pdo->lastInsertId();
     }
 
-    public function paginate(string $query, int $page, int $perPage, array $parameters = [], $mode = PDO::FETCH_ASSOC)
+    public function paginate(string $query, int $page, int $perPage, array $parameters = [], $mode = PDO::FETCH_OBJ)
     {
         $offset = ($page - 1) * $perPage;
         $query .= " LIMIT :limit OFFSET :offset";

@@ -44,8 +44,8 @@ class RegisterController extends Controller
     private function userExists()
     {
         $userExists = (new User())
-            ->where('email', '=', $this->request->input('email'))
-            ->orWhere('username', '=', $this->request->input('username'))
+            ->where('email', $this->request->input('email'))
+            ->orWhere('username', $this->request->input('username'))
             ->first();
 
         return !is_null($userExists);

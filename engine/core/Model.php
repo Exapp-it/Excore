@@ -58,14 +58,14 @@ class Model
         return $this->queryBuilder->select(['*'])->get();
     }
 
-    public function where($column, $operator, $value)
+    public function where($column, $value, $operator = '=')
     {
-        return $this->queryBuilder->where($column, $operator, $value);
+        return $this->queryBuilder->where($column, $value, $operator);
     }
 
-    public function orWhere($column, $operator, $value)
+    public function orWhere($column, $value, $operator = '=')
     {
-        return $this->queryBuilder->orWhere($column, $operator, $value);
+        return $this->queryBuilder->orWhere($column, $value, $operator);
     }
 
     public function orderBy($column, $direction = 'ASC')

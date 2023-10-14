@@ -65,7 +65,7 @@ class Hash
         $verificationResult = password_verify($password, $hash);
 
         if ($verificationResult === false) {
-            throw new RuntimeException('Ошибка при проверке пароля.');
+            return false;
         }
 
         return $verificationResult;
