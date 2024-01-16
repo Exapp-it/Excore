@@ -18,7 +18,7 @@ class Path
 
     public function __construct(Request $request)
     {
-        self::$root = $request->server('DOCUMENT_ROOT');
+        self::$root = dirname($request->server('DOCUMENT_ROOT'));
         self::$app = rtrim(self::$root, self::SEPARATOR) . self::SEPARATOR . 'app';
         self::$views = self::$app . self::SEPARATOR . 'views' . self::SEPARATOR;
         self::$layouts = self::$views . 'layouts' . self::SEPARATOR;

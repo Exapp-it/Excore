@@ -14,18 +14,18 @@
 
 <body>
     <div class="w-full">
-    <ul class="flex space-x-4">
-        <li><a href="/">Home</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
-    </ul>
+        <ul class="flex space-x-4">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+        </ul>
     </div>
-    <!-- 
+
     <ex-header>
-    <ex-sidebar>     -->
-    <main>
-        <ex-content>
-    </main>
+        <ex-sidebar>
+            <main>
+                <ex-content>
+            </main>
 
 
 
