@@ -9,6 +9,9 @@
     <title><ex-title /></title>
     <ex-assets />
     <ex-scripts />
+    <script>
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    </script>
 
 
 </head>
