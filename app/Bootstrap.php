@@ -2,21 +2,22 @@
 
 namespace Excore\App;
 
-use Excore\Core\Core\ModulesInjection;
+use Excore\Core\Core\Base;
+use Excore\Core\Core\Config;
 use Excore\Core\Helpers\Env;
 use Excore\Core\Helpers\Hash;
 use Excore\Core\Helpers\Path;
+use Excore\Core\services\Auth;
 use Excore\Core\Helpers\Assets;
-use Excore\Core\Core\Config;
+use Excore\Core\Modules\View\View;
 use Excore\Core\Modules\Database\DB;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\Router\Router;
 use Excore\Core\Modules\Session\Session;
-use Excore\Core\Modules\View\View;
 
 
-class Modules extends ModulesInjection
+class Bootstrap extends Base
 {
     public function bind()
     {
@@ -46,6 +47,13 @@ class Modules extends ModulesInjection
                 $this->container->resolve('Response'),
                 $this->container->resolve('Session'),
                 $this->container->resolve('View')
+            );
+        });
+
+        $this->container->register('Auth', function () {
+            return  Auth::init(
+                $this->container->resolve('Request'),
+                $this->container->resolve('Session')
             );
         });
 

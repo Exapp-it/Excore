@@ -3,7 +3,7 @@
 namespace Excore\App\Bridges;
 
 use Excore\Core\Core\Bridge;
-use Excore\App\Services\Auth\Auth;
+use Excore\Core\services\Auth;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Http\Response;
 

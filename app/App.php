@@ -2,15 +2,15 @@
 
 namespace Excore\App;
 
-use Excore\App\Dependencies;
+use Excore\App\Bootstrap;
 use Excore\Core\Core\CoreApp;
 use Excore\Core\Core\Container;
+use Excore\Core\Modules\View\View;
 use Excore\Core\Modules\Database\DB;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\Router\Router;
 use Excore\Core\Modules\Session\Session;
-use Excore\Core\Modules\View\View;
 
 
 class App extends CoreApp
@@ -24,17 +24,18 @@ class App extends CoreApp
     public readonly View $view;
     public readonly Router $router;
 
-    public  function __construct()
+    public  function __construct($environment)
     {
+        parent::__construct($environment);
         $this->container = Container::getInstance();
-        $modulesInjecition = new Modules($this->container);
+        $modulesInjecition = new Bootstrap($this->container);
         $modulesInjecition->bind()->use();
     }
 
     public function run()
     {
 
-        if ($this->environment() === 'develop') {
+        if ($this->environment() === 'dev') {
             $this->development();
         }
 

@@ -2,7 +2,6 @@
 
 namespace Excore\App\Models;
 
-use Exception;
 use Excore\Core\Core\Model;
 
 class User extends Model
@@ -33,5 +32,20 @@ class User extends Model
     public function getByLogin($login)
     {
         return $this->where('login', $login)->first();;
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'login' => $this->login,
+            'email' => $this->email,
+            'referrer' => $this->referrer,
+            'password' => $this->password,
+            'auth_token' => $this->auth_token,
+            'reset_token' => $this->reset_token,
+            'status' => $this->status,
+            'created' => $this->created,
+        ];
     }
 }
