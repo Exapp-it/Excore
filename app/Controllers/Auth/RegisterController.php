@@ -2,21 +2,20 @@
 
 namespace Excore\App\Controllers\Auth;
 
-use Excore\App\Controllers\Controller;
 use Excore\App\Models\User;
 use Excore\Core\Helpers\Date;
 use Excore\Core\Helpers\Hash;
+use Excore\App\Controllers\Controller;
 use Excore\Core\Modules\Validation\Validator;
 
 class RegisterController extends Controller
 {
     public function index()
     {
-        $csrfToken =  hash::generateCsrfToken();
 
 
         $this->view->title('Регистрация');
-        return $this->view->render('auth/register', ['csrfToken' => $csrfToken]);
+        return $this->view->render('auth/register');
     }
 
     public function handler()

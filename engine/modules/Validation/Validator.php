@@ -93,6 +93,16 @@ class Validator
         }
     }
 
+    private function validateLogin($fieldName, $fieldValue)
+    {
+        $regex = '/^[a-zA-Z0-9_]{3,20}$/';
+
+        if (!preg_match($regex, $fieldValue)) {
+            $this->addError($fieldName, 'Неверный формат логина. Используйте буквы, цифры и подчеркивания, длина - от 3 до 20 символов.');
+        }
+    }
+
+
     private function validateConfirmed($fieldName, $fieldValue, $confirmationFieldName)
     {
         $confirmationValue = $this->data[$confirmationFieldName] ?? null;

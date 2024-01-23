@@ -8,12 +8,14 @@ class Config
 {
     private static array $db;
     private static array $bridges;
+    private static array $placeholders;
 
     public function __construct(
         private  $path
     ) {
         self::$db = $this->load('db');
         self::$bridges = $this->load('bridges');
+        self::$placeholders = $this->load('placeholders');
     }
 
     public static function init($path)
@@ -29,6 +31,11 @@ class Config
     public static function bridges()
     {
         return self::$bridges;
+    }
+    
+    public static function placeholders()
+    {
+        return self::$placeholders;
     }
 
 

@@ -8,5 +8,6 @@ return [
 
     'app' => [
         'auth' => \Excore\App\Bridges\AuthBridge::class,
+        'guest' => \Excore\App\Bridges\GuestBridge::class,
     ],
 ];

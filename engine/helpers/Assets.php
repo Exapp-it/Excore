@@ -44,12 +44,6 @@ class Assets
     }
 
 
-    public static function alpineCDN()
-    {
-        return '<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.1/dist/cdn.min.js"></script>';
-    }
-
-
     public static function fontAwesome()
     {
         return '<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">

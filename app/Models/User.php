@@ -14,12 +14,14 @@ class User extends Model
 
 
     public int $id;
-    public string $username;
+    public string $login;
     public string $email;
+    public ?int $referrer = null;
     public string $password;
-    public ?string $auth_token = null;
-    public string $updated_at;
-    public string $created_at;
+    public string $auth_token;
+    public ?string $reset_token = null;
+    public ?string $status = null;
+    public $created;
 
 
     public function __construct(array|object $data = [])
@@ -28,8 +30,8 @@ class User extends Model
     }
 
 
-    public function getByEmail($email)
+    public function getByLogin($login)
     {
-        return $this->where('email', $email)->first();;
+        return $this->where('login', $login)->first();;
     }
 }

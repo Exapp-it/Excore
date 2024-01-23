@@ -28,7 +28,7 @@ class Router
         protected View $view,
     ) {
         $this->buildRoute();
-        $this->bridges = $this->getBridges();
+        $this->bridges = $this->getDefaultBridges();
     }
 
 
@@ -46,10 +46,20 @@ class Router
             View::errorPage(404);
         }
 
+
         if ($this->bridges) {
             $nextHandler = null;
 
             foreach ($this->bridges as $class) {
+                $bridge = new $class();
+                $bridge->handler($this->request, $this->response, $nextHandler);
+                $nextHandler = $bridge;
+            }
+        }
+
+        if($route->getBridges()) {
+            foreach ($route->getBridges() as $alias) {
+                $class = $this->getAppBridges()[$alias];
                 $bridge = new $class();
                 $bridge->handler($this->request, $this->response, $nextHandler);
                 $nextHandler = $bridge;
@@ -95,9 +105,15 @@ class Router
         return include_once routesPath('routes');
     }
 
-    private function getBridges(): array
+    private function getDefaultBridges(): array
     {
 
         return Config::bridges()['default'];
+    }
+
+    private function getAppBridges(): array
+    {
+
+        return Config::bridges()['app'];
     }
 }

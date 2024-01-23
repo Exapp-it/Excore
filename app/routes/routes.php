@@ -11,10 +11,10 @@ return [
     Route::get('/', [MainController::class, 'index']),
 
     // Auth
-    Route::get('login', [LoginController::class, 'index']),
-    Route::post('login', [LoginController::class, 'handler']),
-    Route::get('register', [RegisterController::class, 'index']),
-    Route::post('register', [RegisterController::class, 'handler']),
+    Route::get('login', [LoginController::class, 'index'])->bridge('guest'),
+    Route::post('login', [LoginController::class, 'handler'])->bridge('guest'),
+    Route::get('register', [RegisterController::class, 'index'])->bridge('guest'),
+    Route::post('register', [RegisterController::class, 'handler'])->bridge('guest'),
 
     // Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->bridge('auth'),

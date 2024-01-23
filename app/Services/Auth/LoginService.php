@@ -3,6 +3,7 @@
 namespace Excore\App\Services\Auth;
 
 use Excore\App\Models\User;
+use Excore\Core\Helpers\Date;
 use Excore\Core\Helpers\Hash;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Http\Response;
@@ -13,7 +14,8 @@ class LoginService
 {
 
     protected array $errors = [];
-    protected $user = null;
+    protected ?string $message = null;
+    protected ?User $user = null;
 
     public function __construct(
         protected Request $request,
@@ -27,18 +29,19 @@ class LoginService
     {
         $authToken = $this->generateAuthToken();
         $this->user->update(['auth_token' => $authToken]);
-        $this->session->set('user', $authToken);
+        Auth::store($this->user, $this->session);
     }
 
     public function validate()
     {
         $validator =  Validator::init($this->request->post());
         $validator->rules([
-            'email' => ['required', 'email'],
+            'login' => ['required', 'login'],
             'password' => ['required'],
         ])->validate();
 
         if (!$validator->isValid()) {
+            $this->message = "Ошибка валидации";
             $this->errors = $validator->errors();
             return false;
         }
@@ -48,12 +51,12 @@ class LoginService
     public function userVerify()
     {
         if (!$this->user) {
-            $this->errors = ['text' => 'Пользователь не найден'];
+            $this->message = 'Пользователь не найден';
             return false;
         }
 
         if (!Hash::passwordVerify($this->request->input('password'), $this->user->password)) {
-            $this->errors = ['text' => 'Пользователь не найден'];
+            $this->message = 'Пользователь не найден';
             return false;
         }
 
@@ -64,7 +67,7 @@ class LoginService
     {
         return $this->response->sendJson([
             'success' => true,
-            'info' => "Авторизация прошло успешно.",
+            'message' =>  $this->message,
             'redirect' => '/dashboard',
         ]);
     }
@@ -73,14 +76,14 @@ class LoginService
     {
         return $this->response->sendJson([
             'success' => false,
-            'info' => "Ошибка...",
-            'messages' => $this->errors,
+            'message' => $this->message,
+            'errors' => $this->errors,
         ]);
     }
 
     private function userInit()
     {
-        $this->user = (new User())->getByEmail($this->request->input('email'));
+        $this->user = (new User())->getByLogin($this->request->input('login'));
     }
 
     private function generateAuthToken()
