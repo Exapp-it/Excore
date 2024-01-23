@@ -18,7 +18,7 @@ class RegisterController extends Controller
         return $this->view->render('auth/register');
     }
 
-    public function handler()
+    public function store()
     {
         $validator =  Validator::init($this->request->post());
         $validator->rules([
@@ -36,7 +36,7 @@ class RegisterController extends Controller
             return $this->fail(['text' => 'Пользователь с такими данными уже существует']);
         }
 
-        $this->store();
+        $this->storeRegister();
         return $this->success();
     }
 
@@ -51,7 +51,7 @@ class RegisterController extends Controller
     }
 
 
-    private function store()
+    private function storeRegister()
     {
         $user = new User();
         $user->create([

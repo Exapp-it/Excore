@@ -14,7 +14,7 @@ class CsrfBridge extends Bridge
     public function handler(Request $request, Response $response, $next = null)
     {
         if ($request->method() === "POST") {
-            $csrfToken = $request->getHeaders(Response::CSRF_HEADER_NAME);
+            $csrfToken = $request->getHeaders(Response::CSRF_HEADER_NAME) ?? '';
             if (!Hash::verifyCsrfToken($csrfToken)) {
                 return $response->sendJson([
                     'success' => false,

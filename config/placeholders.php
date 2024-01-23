@@ -8,4 +8,5 @@ return [
     "<ex-assets />" => "<?php echo \Excore\Core\Helpers\Assets::css();?>",
     "<ex-scripts />" => "<?php echo \Excore\Core\Helpers\Assets::js();?>",
     "<ex-title />" => '<?php echo $this->title;?>',
+    // "<ex-csrf />" =>   '<input type="hidden" name="csrf_token" value="' . csrf() . '">'
 ];

@@ -21,11 +21,11 @@ class Assets
 
     public static function css()
     {
-        $cssFiles = glob(__DIR__ . '/../../public/css/*.css');
+        $cssFiles = glob(__DIR__ . '/../../public/css/base/*.css');
         $cssTags = '';
 
         foreach ($cssFiles as $cssFile) {
-            $cssTags .= '<link rel="stylesheet" href="' . self::$root . 'public/css/' . basename($cssFile) . '">';
+            $cssTags .= '<link rel="stylesheet" href="' . self::$root . 'public/css/base/' . basename($cssFile) . '">';
         }
 
         return $cssTags;
@@ -33,11 +33,11 @@ class Assets
 
     public static function js()
     {
-        $jsFiles = glob(__DIR__ . '/../../public/js/*.js');
+        $jsFiles = glob(__DIR__ . '/../../public/js/base/*.js');
         $jsTags = '';
 
         foreach ($jsFiles as $jsFile) {
-            $jsTags .= '<script src="' . self::$root . 'public/js/' . basename($jsFile) . '" type="module"></script>';
+            $jsTags .= '<script src="' . self::$root . 'public/js/base/' . basename($jsFile) . '" type="module"></script>';
         }
 
         return $jsTags;

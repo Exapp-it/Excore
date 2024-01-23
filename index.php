@@ -5,7 +5,9 @@ require(__DIR__ . '/vendor/autoload.php');
 
 
 
-$app = new App('dev');
+$app = new App();
 $app->run();
+
+
 
 

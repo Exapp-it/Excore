@@ -16,73 +16,167 @@ use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\Router\Router;
 use Excore\Core\Modules\Session\Session;
 
-
+/**
+ * Class Bootstrap
+ * @package Excore\App
+ */
 class Bootstrap extends Base
 {
+    /**
+     * Register dependencies
+     */
     public function bind()
     {
-        $this->container->register('DB', function () {
-            return DB::getInstance(Config::db());
-        });
-
-        $this->container->register('Request', function () {
-            return Request::init();
-        });
-
-        $this->container->register('Response', function () {
-            return Response::init();
-        });
-
-        $this->container->register('Session', function () {
-            return Session::init();
-        });
-
-        $this->container->register('View', function () {
-            return  View::init($this->container->resolve('Request'));
-        });
-
-        $this->container->register('Router', function () {
-            return  Router::init(
-                $this->container->resolve('Request'),
-                $this->container->resolve('Response'),
-                $this->container->resolve('Session'),
-                $this->container->resolve('View')
-            );
-        });
-
-        $this->container->register('Auth', function () {
-            return  Auth::init(
-                $this->container->resolve('Request'),
-                $this->container->resolve('Session')
-            );
-        });
+        $this->registerDB();
+        $this->registerRequest();
+        $this->registerResponse();
+        $this->registerSession();
+        $this->registerView();
+        $this->registerRouter();
+        $this->registerAuth();
 
         return $this;
     }
 
+    /**
+     * Use configurations
+     */
     public function use()
     {
-
-        $this->container->register('Path', function () {
-            return Path::init($this->container->resolve('Request'));
-        });
-
-        $this->container->register('Assets', function () {
-            return  Assets::init($this->container->resolve('Request'));
-        });
-
-        $this->container->register('Env', function () {
-            return  Env::init(Path::root());
-        });
-
-        $this->container->register('Config', function () {
-            return  Config::init(Path::config());
-        });
-
-        $this->container->register('Hash', function () {
-            return  Hash::init($this->container->resolve('Session'));
-        });
+        $this->registerPath();
+        $this->registerAssets();
+        $this->registerEnv();
+        $this->registerConfig();
+        $this->registerHash();
 
         return $this;
+    }
+
+    /**
+     * Register DB instance
+     */
+    private function registerDB()
+    {
+        $this->container->register('DB', function () {
+            return DB::getInstance(Config::db());
+        });
+    }
+
+    /**
+     * Register Request instance
+     */
+    private function registerRequest()
+    {
+        $this->container->register('Request', function () {
+            return Request::init();
+        });
+    }
+
+    /**
+     * Register Response instance
+     */
+    private function registerResponse()
+    {
+        $this->container->register('Response', function () {
+            return Response::init();
+        });
+    }
+
+    /**
+     * Register Session instance
+     */
+    private function registerSession()
+    {
+        $this->container->register('Session', function () {
+            return Session::init();
+        });
+    }
+
+    /**
+     * Register View instance
+     */
+    private function registerView()
+    {
+        $this->container->register('View', function () {
+            return View::init(request());
+        });
+    }
+
+    /**
+     * Register Router instance
+     */
+    private function registerRouter()
+    {
+        $this->container->register('Router', function () {
+            return Router::init(
+                request(),
+                response(),
+                session(),
+                view(),
+            );
+        });
+    }
+
+    /**
+     * Register Auth instance
+     */
+    private function registerAuth()
+    {
+        $this->container->register('Auth', function () {
+            return Auth::init(
+                request(),
+                session()
+            );
+        });
+    }
+
+    /**
+     * Register Path instance
+     */
+    private function registerPath()
+    {
+        $this->container->register('Path', function () {
+            return Path::init();
+        });
+    }
+
+    /**
+     * Register Assets instance
+     */
+    private function registerAssets()
+    {
+        $this->container->register('Assets', function () {
+            return Assets::init(request());
+        });
+    }
+
+    /**
+     * Register Env instance
+     */
+    private function registerEnv()
+    {
+        $this->container->register('Env', function () {
+            return Env::init(Path::root());
+        });
+    }
+
+    /**
+     * Register Config instance
+     */
+    private function registerConfig()
+    {
+        $this->container->register('Config', function () {
+            return Config::init(Path::config());
+        });
+    }
+
+    /**
+     * Register Hash instance
+     */
+    private function registerHash()
+    {
+        $this->container->register('Hash', function () {
+            return Hash::init(session());
+        });
     }
 }

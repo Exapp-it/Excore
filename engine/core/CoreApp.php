@@ -11,9 +11,9 @@ abstract class CoreApp
 
     protected string $environment = '';
 
-    public function __construct($environment)
+    public function __construct()
     {
-        $this->environment = $environment;
+        $this->environment = env('environment');
     }
 
     protected function environment(): string
@@ -30,6 +30,7 @@ abstract class CoreApp
 
     protected function useHelpersFunctions()
     {
-        return require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'helpers/Functions.php';
+        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'helpers/Helpers.php';
+        require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'helpers/Functions.php';
     }
 }

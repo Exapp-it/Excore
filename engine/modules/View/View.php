@@ -102,6 +102,6 @@ class View
 
     private function getPlaceholders()
     {
-            return Config::placeholders();
+        return Config::placeholders();
     }
 }

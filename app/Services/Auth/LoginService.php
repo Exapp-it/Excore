@@ -29,7 +29,7 @@ class LoginService
     {
         $authToken = $this->generateAuthToken();
         $this->user->update(['auth_token' => $authToken]);
-        Auth::store($this->user, $this->session);
+        auth()->store($this->user);
     }
 
     public function validate()

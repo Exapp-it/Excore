@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<?= Excore\Core\Helpers\Hash::generateCsrfToken() ?>">
-
+    <meta name="csrf-token" content="<?= csrf() ?>">
 
     <title><ex-title /></title>
     <ex-assets />
@@ -30,23 +29,8 @@
 
 
 
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('toast', {
-                messages: [],
-                addMessage(message, status) {
-                    this.messages.push({
-                        message,
-                        status
-                    });
-                    setTimeout(() => {
-                        this.messages.shift();
-                    }, 5000);
-                },
-            });
-        });
-    </script>
 
+    <script src="/public/js/store.js"></script>
 </body>
 
 </html>

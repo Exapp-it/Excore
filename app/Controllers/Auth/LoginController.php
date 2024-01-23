@@ -20,7 +20,7 @@ class LoginController extends Controller
         return $this->view->render('auth/login');
     }
 
-    public function handler()
+    public function store()
     {
         $this->service = new LoginService($this->request, $this->response, $this->session);
 
@@ -34,5 +34,11 @@ class LoginController extends Controller
 
         $this->service->auth();
         return $this->service->success();
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return redirect('login');
     }
 }
