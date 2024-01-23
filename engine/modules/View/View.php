@@ -54,18 +54,18 @@ class View
     public static function errorPage($code)
     {
         http_response_code($code);
-        require(Path::views() . "errors/{$code}.exc.php");
+        require(Path::views() . "errors/{$code}.php");
         exit;
     }
 
     private function getTemplateFilePath(string $template): string
     {
-        return Path::views() . $template . '.exc.php';
+        return Path::views() . $template . '.php';
     }
 
     private function getLayoutFilePath(): string
     {
-        return Path::layouts() . $this->layout . '.exc.php';
+        return Path::layouts() . $this->layout . '.php';
     }
 
     private function renderTemplate(string $templateFile, array $data): string
