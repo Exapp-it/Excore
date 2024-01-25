@@ -3,9 +3,11 @@
 namespace Excore\App\Services\Auth;
 
 use Excore\App\Models\User;
-use Excore\App\Models\UserDetail;
 use Excore\Core\Helpers\Date;
 use Excore\Core\Helpers\Hash;
+use Excore\App\Models\UserDetail;
+use Excore\App\Models\UserWallet;
+use Excore\App\Models\UserContact;
 use Excore\Core\Modules\Http\Request;
 use Excore\Core\Modules\Http\Response;
 use Excore\Core\Modules\Session\Session;
@@ -28,14 +30,17 @@ class RegisterService
     public function store()
     {
         $user = new User();
-        $user->create([
+        $newUser = $user->create([
             'login' => $this->request->input('login'),
             'email' => $this->request->input('email'),
             'referrer' => null,
             'password' => Hash::passwordHash($this->request->input('password')),
             'created' => Date::now()->toString(),
         ]);
-        dd($user);
+        $this->userInit($newUser);
+        $this->createWallet();
+        $this->createDetails();
+        $this->createConatcts();
     }
 
     public function validate()
@@ -60,12 +65,12 @@ class RegisterService
     public function userExists()
     {
         $user = new User();
-      $exist =  $user->where('login', $this->request->input('login'))
+        $userExists =  $user->where('login', $this->request->input('login'))
             ->orWhere('email', $this->request->input('email'))
             ->first();
-            dd($exist);
 
-        if ($user->id) {
+
+        if ($userExists) {
             $this->message = 'Пользователь с такими данными уже существует';
             return true;
         }
@@ -91,12 +96,48 @@ class RegisterService
         ]);
     }
 
+    private function userInit(User $user)
+    {
+        $this->user = $user;
+    }
+
+    private function generateWalletAccount($prefix = '', $suffix = '', $length = 8)
+    {
+        $baseValue = time() * 1000;
+        $randomDigits = mt_rand(1000, 9999);
+
+        $baseValueString = strval($baseValue);
+        $shuffledBaseValueString = str_shuffle($baseValueString);
+        $suffix = str_shuffle($suffix);
+
+        $uniqueId = substr(intval($shuffledBaseValueString) + $randomDigits, 0, $length);
+
+        return $prefix . $uniqueId . $suffix;
+    }
+
+
+    private function createWallet()
+    {
+        $wallet = new UserWallet();
+        $wallet->create([
+            'user_id' => $this->user->id,
+            'account_number' => $this->generateWalletAccount('VP'),
+        ]);
+    }
 
     private function createDetails()
     {
         $detail = new UserDetail();
         $detail->create([
-            // 'user_id' =>
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    private function createConatcts()
+    {
+        $contact = new UserContact();
+        $contact->create([
+            'user_id' => $this->user->id,
         ]);
     }
 }

@@ -9,30 +9,26 @@
     <title><ex-title /></title>
     <ex-assets />
     <ex-scripts />
-    <!-- <script>
+    <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    </script> -->
+    </script>
 
 
 </head>
 
-<body class="min-h-screen bg-gray-900">
-    <!-- <div class="w-full">
-        <ul class="flex space-x-4">
-            <li><a href="/">Home</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li>
-        </ul>
-    </div>
-
+<body class="min-h-screen bg-stone-900">
     <ex-header />
-    <main> -->
+    <main>
         <ex-content />
-    <!-- </main> -->
+    </main>
 
 
-
+    <ex-footer />
+    <ex-login-modal />
     <script src="/public/js/store.js"></script>
+
+
+
 </body>
 
 </html>

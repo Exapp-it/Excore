@@ -24,7 +24,7 @@ class RegisterController extends Controller
         if (!$this->service->validate()) {
             return $this->service->fail();
         }
-dd($this->service->userExists());
+
         if ($this->service->userExists()) {
             return $this->service->fail();
         }
@@ -32,5 +32,4 @@ dd($this->service->userExists());
         $this->service->store();
         return $this->service->success();
     }
-
 }

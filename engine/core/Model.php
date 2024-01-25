@@ -57,7 +57,7 @@ class Model
 
     public function create(array $data)
     {
-        return $this->queryBuilder->create($data);
+       return $this->find($this->queryBuilder->create($data));
     }
 
     public function update(array $data)

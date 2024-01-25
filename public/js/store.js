@@ -11,4 +11,18 @@ document.addEventListener('alpine:init', () => {
             }, 5000);
         },
     });
+
+    Alpine.store('modal', {
+        login: {
+            isOpen: false,
+            open() {
+                console.log('Login modal opened');
+                this.isOpen = true;
+            },
+            close() {
+                console.log('Login modal closed');
+                this.isOpen = false;
+            }
+        }
+    });
 });

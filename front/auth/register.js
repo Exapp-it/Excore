@@ -1,5 +1,5 @@
 document.addEventListener('alpine:init', () => {
-    Alpine.data('registerForm', function() {
+    Alpine.data('registerForm', function () {
         return {
             toast: Alpine.store('toast'),
             login: '',
@@ -12,12 +12,12 @@ document.addEventListener('alpine:init', () => {
             openToast() {
                 this.toast.addMessage(this.message, this.status);
             },
-            clearData: function() {
+            clearData: function () {
                 this.error = {}
                 this.message = ''
                 this.status = ''
             },
-            loginRequest: async function() {
+            loginRequest: async function () {
                 this.clearData()
                 try {
                     const response = await axios.post('register', {
@@ -53,8 +53,9 @@ document.addEventListener('alpine:init', () => {
                         if (data.redirect) {
                             // Обработка успешной авторизации с перенаправлением
                             window.location = data.redirect;
+                        } else {
+                            this.openToast();
                         }
-                        this.openToast();
                     }
 
                 } catch (error) {
@@ -64,8 +65,9 @@ document.addEventListener('alpine:init', () => {
                     this.message = 'Ошибка сервера';
                     if (data.redirect) {
                         window.location = data.redirect;
+                    } else {
+                        this.openToast();
                     }
-                    this.openToast();
                 }
             }
         };

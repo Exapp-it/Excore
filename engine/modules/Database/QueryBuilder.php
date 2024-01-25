@@ -27,8 +27,9 @@ class QueryBuilder
         $values = ':' . implode(', :', array_keys($data));
 
         $query = "INSERT INTO $this->table ($columns) VALUES ($values)";
+        $this->db->execute($query, $data);
 
-        return $this->db->execute($query, $data);
+        return $this->db->lastInsertId();
     }
 
 

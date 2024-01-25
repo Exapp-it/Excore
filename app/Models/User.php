@@ -15,7 +15,7 @@ class User extends Model
     public string $email;
     public ?int $referrer = null;
     public string $password;
-    public string $auth_token;
+    public ?string $auth_token = null;
     public ?string $reset_token = null;
     public ?string $status = null;
     public $created;
