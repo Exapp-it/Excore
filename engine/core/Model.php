@@ -13,7 +13,7 @@ class Model
     protected string $table = '';
     public string $primaryKey = 'id';
 
-    protected int $id;
+    public int $id;
 
 
     public function __construct($data)
@@ -55,8 +55,6 @@ class Model
         return null;
     }
 
-
-
     public function create(array $data)
     {
         return $this->queryBuilder->create($data);
@@ -75,7 +73,7 @@ class Model
     public function all()
     {
         $data = $this->queryBuilder->select(['*'])->get();
-        
+
         foreach ($data as $value) {
             $instance[] = new static($value);
         }
@@ -133,5 +131,23 @@ class Model
             'total_items' => $totalItems,
             'total_pages' => $totalPages,
         ];
+    }
+
+    public function join(string $table, string $condition)
+    {
+        $this->queryBuilder->join($table, $condition);
+        return $this;
+    }
+
+    public function get()
+    {
+        $data = $this->queryBuilder->get();
+
+        $instances = [];
+        foreach ($data as $value) {
+            $instances[] = new static($value);
+        }
+
+        return $instances;
     }
 }

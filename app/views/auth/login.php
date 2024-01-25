@@ -1,20 +1,12 @@
-<div x-data="form" class="container mx-auto py-8">
+<div x-data="loginForm" class="container mx-auto py-8">
     <div class="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden">
     </div>
     <div class="relative   min-h-screen  sm:flex sm:flex-row  justify-center bg-transparent rounded-3xl shadow-xl">
-        <div class="flex-col flex  self-center lg:px-14 sm:max-w-4xl xl:max-w-md  z-10">
-            <div class="self-start hidden lg:flex flex-col  text-gray-300">
-
-                <h1 class="my-3 font-semibold text-4xl">Welcome back</h1>
-                <p class="pr-3 text-sm opacity-75">Lorem ipsum is placeholder text commonly used in the graphic, print,
-                    and publishing industries for previewing layouts and visual mockups</p>
-            </div>
-        </div>
         <div class="flex justify-center self-center  z-10">
             <div class="p-12 bg-white mx-auto rounded-3xl w-96 ">
                 <div class="mb-7">
-                    <h3 class="font-semibold text-2xl text-gray-800">Sign In </h3>
-                    <p class="text-gray-400">Don'thave an account? <a href="#" class="text-sm text-purple-700 hover:text-purple-700">Sign Up</a></p>
+                    <h3 class="font-semibold text-2xl text-gray-800">Авторизация </h3>
+                    <p class="text-gray-400">У вас нет аккаунта? <a href="/register" class="text-sm text-purple-700 hover:text-purple-700">Создать аккаунт</a></p>
                 </div>
                 <form @submit.prevent="loginRequest">
                     <div class="space-y-6">
@@ -49,7 +41,7 @@
                         </div>
                         <div>
                             <button type="submit" class="w-full flex justify-center bg-purple-800  hover:bg-purple-700 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-500">
-                                Sign in
+                                Войти
                             </button>
                         </div>
                     </div>

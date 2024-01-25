@@ -21,14 +21,16 @@ class View
         return new static($request);
     }
 
-    public function setLayout(string $layout)
+    public function layout(string $layout)
     {
         $this->layout = $layout;
+        return $this;
     }
 
     public function title(string $title)
     {
         $this->title .= $title;
+        return $this;
     }
 
     public function render(string $template, array $data = [])

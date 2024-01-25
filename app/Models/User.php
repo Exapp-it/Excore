@@ -7,12 +7,10 @@ use Excore\Core\Core\Model;
 class User extends Model
 {
     protected string $table = 'users';
-
     public string $primaryKey = 'id';
 
 
 
-    public int $id;
     public string $login;
     public string $email;
     public ?int $referrer = null;

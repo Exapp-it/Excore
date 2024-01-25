@@ -81,6 +81,7 @@ class Validator
 
     private function validateRequired($fieldName, $fieldValue)
     {
+        // ucfirst($fieldName);
         if (empty($fieldValue) || is_null($fieldValue)) {
             $this->addError($fieldName, "Поле $fieldName обязательно для заполнения");
         }

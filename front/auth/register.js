@@ -1,10 +1,11 @@
 document.addEventListener('alpine:init', () => {
-    Alpine.data('loginForm', function() {
-        let timer;
+    Alpine.data('registerForm', function() {
         return {
             toast: Alpine.store('toast'),
             login: '',
+            email: '',
             password: '',
+            password_confirm: '',
             error: {},
             message: '',
             status: '',
@@ -19,9 +20,11 @@ document.addEventListener('alpine:init', () => {
             loginRequest: async function() {
                 this.clearData()
                 try {
-                    const response = await axios.post('login', {
+                    const response = await axios.post('register', {
                         login: this.login,
+                        email: this.email,
                         password: this.password,
+                        password_confirm: this.password_confirm,
                     }, {
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

@@ -21,7 +21,7 @@ return [
     Route::get('logout', [LoginController::class, 'logout'])->bridge('auth'),
 
 
-    Route::get('test', function() {
-        dd(auth()->user());
+    Route::get('frontend', function() {
+        view()->render('frontend');
     }),
 ];

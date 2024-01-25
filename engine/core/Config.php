@@ -6,6 +6,7 @@ use Excore\Core\Helpers\Path;
 
 class Config
 {
+    private static array $app;
     private static array $db;
     private static array $bridges;
     private static array $placeholders;
@@ -13,6 +14,7 @@ class Config
     public function __construct(
         private  $path
     ) {
+        self::$app = $this->load('app');
         self::$db = $this->load('db');
         self::$bridges = $this->load('bridges');
         self::$placeholders = $this->load('placeholders');
@@ -21,6 +23,11 @@ class Config
     public static function init($path)
     {
         return new static($path);
+    }
+
+    public static function app(String $name)
+    {
+        return self::$app[$name];
     }
 
     public static function db()
@@ -41,6 +48,6 @@ class Config
 
     private function load($config)
     {
-        return require_once $this->path . Path::SEPARATOR . $config . '.php';
+        return include_once($this->path . Path::SEPARATOR . $config . '.php');
     }
 }

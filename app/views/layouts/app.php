@@ -9,15 +9,15 @@
     <title><ex-title /></title>
     <ex-assets />
     <ex-scripts />
-    <script>
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    </script>
+    <!-- <script>
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    </script> -->
 
 
 </head>
 
-<body>
-    <div class="w-full">
+<body class="min-h-screen bg-gray-900">
+    <!-- <div class="w-full">
         <ul class="flex space-x-4">
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
@@ -26,10 +26,9 @@
     </div>
 
     <ex-header />
-    <main>
+    <main> -->
         <ex-content />
-    </main>
-
+    <!-- </main> -->
 
 
 

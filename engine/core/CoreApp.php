@@ -3,8 +3,9 @@
 namespace Excore\Core\Core;
 
 
-use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
+use Excore\Core\Core\Config;
+use Whoops\Handler\PrettyPageHandler;
 
 abstract class CoreApp
 {
@@ -13,11 +14,12 @@ abstract class CoreApp
 
     public function __construct()
     {
-        $this->environment = env('environment');
+        $this->environment = env('ENVIROMENT');
     }
 
     protected function environment(): string
     {
+
         return $this->environment;
     }
 
