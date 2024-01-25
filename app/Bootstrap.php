@@ -91,6 +91,7 @@ class Bootstrap extends Base
             return Session::init();
         });
     }
+    
 
     /**
      * Register View instance
